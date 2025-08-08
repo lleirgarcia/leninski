@@ -1,0 +1,502 @@
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 300;
+    line-height: 1.6;
+    color: #333;
+    background-color: #fff;
+}
+
+.container {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Hero Section */
+.hero {
+    background: linear-gradient(135deg, #2a2a2a 0%, #000 100%);
+    color: white;
+    padding: 60px 0;
+    height: 66.66vh;
+    display: flex;
+    align-items: center;
+}
+
+.hero-content {
+    display: flex;
+    flex-direction: column;
+    gap: 80px;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.hero-header {
+    text-align: center;
+}
+
+.hero-title {
+    font-size: 4rem;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+.hero-subtitle {
+    font-size: 1.8rem;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+}
+
+.hero-welcome {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    align-items: center;
+    text-align: center;
+}
+
+.hero-contact {
+    position: absolute;
+    top: 50%;
+    right: 60px;
+    transform: translateY(-50%);
+}
+
+.contact-btn {
+    display: inline-block;
+    padding: 15px 30px;
+    background-color: transparent;
+    color: white;
+    text-decoration: none;
+    border: 2px solid white;
+    font-size: 1rem;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.contact-btn:hover {
+    background-color: white;
+    color: #000;
+}
+
+.welcome-title {
+    font-size: 2.5rem;
+    font-weight: 300;
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-align: center;
+}
+
+.welcome-text {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    font-weight: 300;
+    text-align: center;
+}
+
+/* Portfolio Overview Section */
+.portfolio-overview {
+    background-color: #f8f8f8;
+    color: #333;
+    padding: 40px 0;
+    height: 33.33vh;
+    display: flex;
+    align-items: center;
+}
+
+.portfolio-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+}
+
+.portfolio-title {
+    font-size: 2.5rem;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.portfolio-text {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    font-weight: 300;
+}
+
+/* Navigation Section */
+.navigation {
+    background-color: #f8f8f8;
+    padding: 60px 0;
+    min-height: 30vh;
+    display: flex;
+    align-items: center;
+}
+
+.nav-categories {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 30px;
+    align-items: start;
+}
+
+.nav-category {
+    text-align: left;
+}
+
+.nav-title {
+    font-size: 2.5rem;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #333;
+    margin-bottom: 20px;
+    line-height: 1.4;
+}
+
+.nav-image {
+    aspect-ratio: 1/3;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    max-width: 100%;
+}
+
+.nav-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.nav-image:hover img {
+    transform: scale(1.05);
+}
+
+
+
+/* Gallery Section */
+.gallery {
+    background-color: #f8f8f8;
+    padding: 60px 0;
+}
+
+.gallery-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+    flex: 1;
+}
+
+.gallery-item {
+    aspect-ratio: 3/4;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.gallery-item:hover img {
+    transform: scale(1.05);
+}
+
+.gallery-nav {
+    width: 50px;
+    height: 50px;
+    border: none;
+    background-color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.gallery-nav:hover {
+    background-color: #f0f0f0;
+    transform: scale(1.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 15px;
+    }
+    
+    .hero {
+        height: 100vh;
+        padding: 40px 0;
+    }
+    
+    .hero-content {
+        gap: 60px;
+    }
+    
+    .hero-title {
+        font-size: 3rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.5rem;
+    }
+    
+    .hero-welcome {
+        gap: 30px;
+        text-align: center;
+        max-width: 100%;
+    }
+    
+    .hero-contact {
+        position: static;
+        transform: none;
+        margin-top: 30px;
+    }
+    
+    .contact-btn {
+        padding: 12px 25px;
+        font-size: 0.9rem;
+    }
+    
+    .welcome-title {
+        font-size: 2rem;
+    }
+    
+    .welcome-text {
+        font-size: 1rem;
+    }
+    
+    .portfolio-overview {
+        height: 33.33vh;
+        padding: 30px 0;
+    }
+    
+    .navigation {
+        min-height: 25vh;
+        padding: 40px 0;
+    }
+    
+    .nav-categories {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    
+    .nav-category {
+        min-width: auto;
+        width: 100%;
+    }
+    
+    .carousel-nav {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+    
+    .gallery-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .gallery-nav {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+    
+    .gallery-container {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .footer {
+        padding: 15px 0;
+        min-height: 10vh;
+    }
+    
+    .footer-content {
+        gap: 10px;
+    }
+    
+    .footer-title {
+        font-size: 1rem;
+    }
+    
+    .footer-info {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero {
+        padding: 40px 0;
+    }
+    
+    .portfolio-overview {
+        padding: 60px 0;
+    }
+    
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .welcome-title {
+        font-size: 1.5rem;
+    }
+    
+    .gallery {
+        padding: 40px 0;
+    }
+    
+    .footer {
+        padding: 40px 0;
+    }
+    
+    .footer-title {
+        font-size: 2rem;
+    }
+    
+    .footer-info {
+        gap: 30px;
+    }
+}
+
+/* Footer Section */
+.footer {
+    background: linear-gradient(135deg, #2a2a2a 0%, #000 100%);
+    color: white;
+    padding: 20px 0;
+    min-height: 12.5vh;
+    display: flex;
+    align-items: center;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+    text-align: center;
+}
+
+.footer-header {
+    text-align: center;
+}
+
+.footer-title {
+    font-size: 1rem;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.footer-subtitle {
+    font-size: 1.2rem;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    opacity: 0.8;
+}
+
+.footer-info {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    align-items: start;
+    width: 100%;
+}
+
+.contact-item {
+    text-align: center;
+}
+
+.contact-title {
+    font-size: 1rem;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 15px;
+    opacity: 0.7;
+}
+
+.contact-text {
+    font-size: 1.1rem;
+    font-weight: 300;
+    line-height: 1.6;
+}
+
+.social-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+
+.social-link {
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 300;
+    transition: opacity 0.3s ease;
+}
+
+.social-link:hover {
+    opacity: 0.7;
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Focus styles for accessibility */
+.nav-link:focus,
+.gallery-nav:focus,
+.social-link:focus {
+    outline: 2px solid #333;
+    outline-offset: 2px;
+}
+
+/* Loading animation for images */
+.gallery-item img {
+    opacity: 0;
+    animation: fadeIn 0.5s ease-in forwards;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+} 

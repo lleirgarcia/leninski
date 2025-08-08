@@ -1,0 +1,208 @@
+/* Planning Solution Page */
+.planning-solution {
+  background-color: #f8f8f8;
+  min-height: 100vh;
+  padding: 60px 0;
+}
+
+.planning-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 60px;
+  position: relative;
+}
+
+.planning-title {
+  font-size: 3rem;
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #333;
+}
+
+.about-text {
+  font-size: 1.2rem;
+  font-weight: 300;
+  color: #333;
+  line-height: 1.6;
+  max-width: 600px;
+  text-align: right;
+}
+
+.planning-content {
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+}
+
+/* Floor Plan Images */
+.floor-plan-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 60px;
+}
+
+.floor-plan-image {
+  max-width: 100%;
+  height: auto;
+}
+
+.clickable {
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.clickable:hover {
+  opacity: 0.8;
+}
+
+/* Side by Side Container */
+.side-by-side-container {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 60px;
+  align-items: flex-start;
+}
+
+.floor-plan-container-left {
+  flex: 2;
+  display: flex;
+  justify-content: center;
+}
+
+.floor-plan-container-right {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+/* Interactive Zoom Modal */
+.zoom-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  cursor: pointer;
+}
+
+.zoom-controls {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+  z-index: 1001;
+}
+
+.zoom-btn {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.zoom-btn:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.zoom-btn.close {
+  font-size: 1.5rem;
+}
+
+.zoom-content {
+  position: relative;
+  max-width: 90%;
+  max-height: 90%;
+  cursor: grab;
+  overflow: hidden;
+}
+
+.zoom-content:active {
+  cursor: grabbing;
+}
+
+.zoomed-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  transition: transform 0.1s ease;
+  user-select: none;
+}
+
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .planning-header {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+
+  .planning-title {
+    font-size: 2rem;
+  }
+
+  .visual-elements {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .commercial-section {
+    padding: 20px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .planning-solution {
+    padding: 40px 0;
+  }
+
+  .planning-title {
+    font-size: 1.8rem;
+  }
+
+  .section-title {
+    font-size: 2rem;
+  }
+} 
+
+/* Responsive for side by side */
+@media (max-width: 768px) {
+  .side-by-side-container {
+    flex-direction: column;
+    gap: 30px;
+  }
+  
+  .floor-plan-container-left,
+  .floor-plan-container-right {
+    flex: 1;
+  }
+
+  .zoom-controls {
+    top: 10px;
+    right: 10px;
+  }
+
+  .zoom-btn {
+    width: 35px;
+    height: 35px;
+    font-size: 1rem;
+  }
+} 
