@@ -64,8 +64,7 @@ const NavigationCarousel = () => {
         console.log('Navigate to Moodboard page');
         break;
       case 'DRAWINGS':
-        // Navigate to Drawings page (to be created)
-        console.log('Navigate to Drawings page');
+        navigate('/drawings');
         break;
       case 'DETAILS':
         // Navigate to Details page (to be created)
@@ -115,7 +114,7 @@ const NavigationCarousel = () => {
               <SwiperSlide key={category.id}>
                 <motion.div 
                   className="nav-category"
-                  whileHover={{ scale: 1.02 }}
+                  whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => handleCategoryClick(category)}
                 >

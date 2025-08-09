@@ -5,6 +5,7 @@ import PortfolioOverview from './components/PortfolioOverview';
 import NavigationCarousel from './components/NavigationCarousel';
 import Footer from './components/Footer';
 import PlanningSolution from './components/PlanningSolution';
+import Drawings from './components/Drawings';
 import './App.css';
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
             </>
           } />
           <Route path="/planning-solution" element={<PlanningSolution />} />
+          <Route path="/drawings" element={<Drawings />} />
         </Routes>
       </div>
     </Router>
