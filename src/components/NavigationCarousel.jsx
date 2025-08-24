@@ -27,26 +27,20 @@ const NavigationCarousel = () => {
     },
     {
       id: 2,
-      title: 'MOODBOARD',
-      image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-      alt: 'Moodboard'
-    },
-    {
-      id: 3,
       title: 'DRAWINGS',
-      image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+      image: '/drawings/08_background.png',
       alt: 'Drawings'
     },
     {
-      id: 4,
+      id: 3,
       title: 'DETAILS',
-      image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+      image: '/details/01.png',
       alt: 'Details'
     },
     {
-      id: 5,
+      id: 4,
       title: 'IMPLEMENTS',
-      image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+      image: '/IMPLEMENT/IZAKAYA/01.jpg',
       alt: 'Implements'
     }
   ];
@@ -59,20 +53,14 @@ const NavigationCarousel = () => {
       case 'PLANNING':
         navigate('/planning-solution');
         break;
-      case 'MOODBOARD':
-        // Navigate to Moodboard page (to be created)
-        console.log('Navigate to Moodboard page');
-        break;
       case 'DRAWINGS':
         navigate('/drawings');
         break;
       case 'DETAILS':
-        // Navigate to Details page (to be created)
-        console.log('Navigate to Details page');
+        navigate('/details');
         break;
       case 'IMPLEMENTS':
-        // Navigate to Implements page (to be created)
-        console.log('Navigate to Implements page');
+        navigate('/implements');
         break;
       default:
         console.log('Unknown category:', category.title);

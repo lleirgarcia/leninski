@@ -1,11 +1,12 @@
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import { Link } from 'react-router-dom';
 import Footer from './Footer';
 import './Drawings.css';
 
 const Drawings = () => {
-  const [ref, inView] = useInView({
+  const { ref, inView } = useInView({
     triggerOnce: true,
     threshold: 0.1
   });
@@ -70,12 +71,17 @@ const Drawings = () => {
 
   return (
     <>
+      {/* Floating Home Button */}
+      <Link to="/" className="floating-home-btn" aria-label="Back to Home">
+        ⌂
+      </Link>
+      
       <section className="drawings">
         <div className="container">
           <motion.div
             className="drawings-header"
             initial={{ opacity: 0, y: 30 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
             <h1 className="drawings-title">DRAWINGS</h1>
@@ -88,16 +94,12 @@ const Drawings = () => {
             className="drawings-content"
             ref={ref}
             initial={{ opacity: 0, y: 30 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
+
             {/* Large image */}
-            <motion.div
-              className="drawing-container"
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, delay: 0.4 }}
-            >
+            <div className="drawing-container">
               <img
                 src="/drawings/01.png"
                 alt="Drawing 1"
@@ -108,13 +110,13 @@ const Drawings = () => {
                   e.target.style.display = 'none';
                 }}
               />
-            </motion.div>
+            </div>
 
             {/* Large image */}
             <motion.div
               className="drawing-container"
               initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
             >
               <img
@@ -129,44 +131,49 @@ const Drawings = () => {
               />
             </motion.div>
 
-            {/* Side by side */}
-            <motion.div
-              className="side-by-side-container"
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, delay: 0.8 }}
-            >
-              <div className="drawing-container-left">
-                <img
-                  src="/drawings/03%20.png"
-                  alt="Drawing 3"
-                  className="drawing-image clickable"
-                  onClick={() => handleImageClick('/drawings/03%20.png')}
-                  onError={(e) => {
-                    console.error('Failed to load image /drawings/03%20.png');
-                    e.target.style.display = 'none';
-                  }}
-                />
-              </div>
-              <div className="drawing-container-right">
-                <img
-                  src="/drawings/04.png"
-                  alt="Drawing 4"
-                  className="drawing-image clickable"
-                  onClick={() => handleImageClick('/drawings/04.png')}
-                  onError={(e) => {
-                    console.error('Failed to load image /drawings/04.png');
-                    e.target.style.display = 'none';
-                  }}
-                />
-              </div>
-            </motion.div>
-
-            {/* Large image */}
+            {/* Drawing 3 */}
             <motion.div
               className="drawing-container"
               initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.8 }}
+            >
+              <img
+                src="/drawings/03%20.png"
+                alt="Drawing 3"
+                className="drawing-image clickable"
+                onClick={() => handleImageClick('/drawings/03%20.png')}
+                onError={(e) => {
+                  console.error('Failed to load image /drawings/03%20.png');
+                  e.target.style.display = 'none';
+                }}
+              />
+            </motion.div>
+
+            {/* Drawing 4 */}
+            <motion.div
+              className="drawing-container"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.9 }}
+            >
+              <img
+                src="/drawings/04.png"
+                alt="Drawing 4"
+                className="drawing-image clickable"
+                onClick={() => handleImageClick('/drawings/04.png')}
+                onError={(e) => {
+                  console.error('Failed to load image /drawings/04.png');
+                  e.target.style.display = 'none';
+                }}
+              />
+            </motion.div>
+
+            {/* Drawing 5 */}
+            <motion.div
+              className="drawing-container"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 1.0 }}
             >
               <img
@@ -180,26 +187,33 @@ const Drawings = () => {
                 }}
               />
             </motion.div>
-            {/* 06 + 07 - Side by side */}
+            {/* Drawing 6 */}
+            <motion.div
+              className="drawing-container"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 1.1 }}
+            >
+              <img
+                src="/drawings/06.png"
+                alt="Drawing 6"
+                className="drawing-image clickable"
+                onClick={() => handleImageClick('/drawings/06.png')}
+                onError={(e) => {
+                  console.error('Failed to load image /drawings/06.png');
+                  e.target.style.display = 'none';
+                }}
+              />
+            </motion.div>
+
+            {/* 07 + 08 - Side by side */}
             <motion.div
               className="side-by-side-container"
               initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 1.2 }}
             >
               <div className="drawing-container-left">
-                <img
-                  src="/drawings/06.png"
-                  alt="Drawing 6"
-                  className="drawing-image clickable"
-                  onClick={() => handleImageClick('/drawings/06.png')}
-                  onError={(e) => {
-                    console.error('Failed to load image /drawings/06.png');
-                    e.target.style.display = 'none';
-                  }}
-                />
-              </div>
-              <div className="drawing-container-right">
                 <img
                   src="/drawings/07.png"
                   alt="Drawing 7"
@@ -211,22 +225,167 @@ const Drawings = () => {
                   }}
                 />
               </div>
+              <div className="drawing-container-right">
+                <img
+                  src="/drawings/08.png"
+                  alt="Drawing 8"
+                  className="drawing-image clickable"
+                  onClick={() => handleImageClick('/drawings/08.png')}
+                  onError={(e) => {
+                    console.error('Failed to load image /drawings/08.png');
+                    e.target.style.display = 'none';
+                  }}
+                />
+              </div>
             </motion.div>
 
-            {/* 08 - Large */}
+            {/* Drawing 9 */}
             <motion.div
               className="drawing-container"
               initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 1.4 }}
             >
               <img
-                src="/drawings/08.png"
-                alt="Drawing 8"
+                src="/drawings/09.png"
+                alt="Drawing 9"
                 className="drawing-image clickable"
-                onClick={() => handleImageClick('/drawings/08.png')}
+                onClick={() => handleImageClick('/drawings/09.png')}
                 onError={(e) => {
-                  console.error('Failed to load image /drawings/08.png');
+                  console.error('Failed to load image /drawings/09.png');
+                  e.target.style.display = 'none';
+                }}
+              />
+            </motion.div>
+
+            {/* Drawing 10 */}
+            <motion.div
+              className="drawing-container"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 1.5 }}
+            >
+              <img
+                src="/drawings/10.png"
+                alt="Drawing 10"
+                className="drawing-image clickable"
+                onClick={() => handleImageClick('/drawings/10.png')}
+                onError={(e) => {
+                  console.error('Failed to load image /drawings/10.png');
+                  e.target.style.display = 'none';
+                }}
+              />
+            </motion.div>
+
+            {/* Drawing 11 */}
+            <motion.div
+              className="drawing-container"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 1.6 }}
+            >
+              <img
+                src="/drawings/11.png"
+                alt="Drawing 11"
+                className="drawing-image clickable"
+                onClick={() => handleImageClick('/drawings/11.png')}
+                onError={(e) => {
+                  console.error('Failed to load image /drawings/11.png');
+                  e.target.style.display = 'none';
+                }}
+              />
+            </motion.div>
+
+            {/* Drawing 12 */}
+            <motion.div
+              className="drawing-container"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 1.7 }}
+            >
+              <img
+                src="/drawings/12.png"
+                alt="Drawing 12"
+                className="drawing-image clickable"
+                onClick={() => handleImageClick('/drawings/12.png')}
+                onError={(e) => {
+                  console.error('Failed to load image /drawings/12.png');
+                  e.target.style.display = 'none';
+                }}
+              />
+            </motion.div>
+
+            {/* Drawing 13 */}
+            <motion.div
+              className="drawing-container"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 1.8 }}
+            >
+              <img
+                src="/drawings/13.png"
+                alt="Drawing 13"
+                className="drawing-image clickable"
+                onClick={() => handleImageClick('/drawings/13.png')}
+                onError={(e) => {
+                  console.error('Failed to load image /drawings/13.png');
+                  e.target.style.display = 'none';
+                }}
+              />
+            </motion.div>
+
+            {/* Drawing 14 */}
+            <motion.div
+              className="drawing-container"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 1.9 }}
+            >
+              <img
+                src="/drawings/14.png"
+                alt="Drawing 14"
+                className="drawing-image clickable"
+                onClick={() => handleImageClick('/drawings/14.png')}
+                onError={(e) => {
+                  console.error('Failed to load image /drawings/14.png');
+                  e.target.style.display = 'none';
+                }}
+              />
+            </motion.div>
+
+            {/* Drawing 15 */}
+            <motion.div
+              className="drawing-container"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 2.0 }}
+            >
+              <img
+                src="/drawings/15.png"
+                alt="Drawing 15"
+                className="drawing-image clickable"
+                onClick={() => handleImageClick('/drawings/15.png')}
+                onError={(e) => {
+                  console.error('Failed to load image /drawings/15.png');
+                  e.target.style.display = 'none';
+                }}
+              />
+            </motion.div>
+
+            {/* Drawing 16 */}
+            <motion.div
+              className="drawing-container"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 2.1 }}
+            >
+              <img
+                src="/drawings/16.png"
+                alt="Drawing 16"
+                className="drawing-image clickable"
+                onClick={() => handleImageClick('/drawings/16.png')}
+                onError={(e) => {
+                  console.error('Failed to load image /drawings/16.png');
                   e.target.style.display = 'none';
                 }}
               />

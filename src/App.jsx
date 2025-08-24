@@ -6,6 +6,8 @@ import NavigationCarousel from './components/NavigationCarousel';
 import Footer from './components/Footer';
 import PlanningSolution from './components/PlanningSolution';
 import Drawings from './components/Drawings';
+import Details from './components/Details';
+import Implements from './components/Implements';
 import './App.css';
 
 function App() {
@@ -23,6 +25,8 @@ function App() {
           } />
           <Route path="/planning-solution" element={<PlanningSolution />} />
           <Route path="/drawings" element={<Drawings />} />
+          <Route path="/details" element={<Details />} />
+          <Route path="/implements" element={<Implements />} />
         </Routes>
       </div>
     </Router>

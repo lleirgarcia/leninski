@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import { Link } from 'react-router-dom';
 import Footer from './Footer';
 import './PlanningSolution.css';
 
@@ -70,6 +71,11 @@ const PlanningSolution = () => {
 
   return (
     <>
+      {/* Floating Home Button */}
+      <Link to="/" className="floating-home-btn" aria-label="Back to Home">
+        ⌂
+      </Link>
+      
       <section className="planning-solution">
         <div className="container">
           <motion.div 

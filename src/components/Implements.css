@@ -1,0 +1,321 @@
+.implements-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  color: #333;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  overflow-x: hidden;
+}
+
+.implements-content {
+  flex: 1;
+  padding: 60px 40px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.implements-title {
+  font-size: 3rem;
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  text-align: center;
+  margin-bottom: 60px;
+  color: #333;
+  text-transform: uppercase;
+}
+
+/* Gallery Table Layout */
+.gallery-table {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px 0;
+}
+
+/* Image Container Base */
+.gallery-item {
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  background: #f8f8f8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gallery-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Gallery Image */
+.gallery-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: all 0.3s ease;
+}
+
+.gallery-image:hover {
+  transform: scale(1.05);
+}
+
+/* Different Dimensions for Gallery Items */
+
+/* Small items - 200px height */
+.gallery-item.small {
+  height: 200px;
+}
+
+/* Medium items - 280px height */
+.gallery-item.medium {
+  height: 280px;
+}
+
+/* Large items - 360px height */
+.gallery-item.large {
+  height: 360px;
+}
+
+/* Wide items - span 2 columns, 240px height */
+.gallery-item.wide {
+  grid-column: span 2;
+  height: 240px;
+}
+
+/* Tall items - 400px height */
+.gallery-item.tall {
+  height: 400px;
+}
+
+/* Featured items - span 2 columns, 320px height */
+.gallery-item.featured {
+  grid-column: span 2;
+  height: 320px;
+}
+
+/* Hero items - span 3 columns, 400px height */
+.gallery-item.hero {
+  grid-column: span 3;
+  height: 400px;
+}
+
+/* Square items - aspect ratio 1:1 */
+.gallery-item.square {
+  height: 250px;
+  aspect-ratio: 1;
+}
+
+/* Panoramic items - span 3 columns, 200px height */
+.gallery-item.panoramic {
+  grid-column: span 3;
+  height: 200px;
+}
+
+/* White background removal for PNG images */
+.gallery-image.remove-white {
+  filter: 
+    contrast(1.1) 
+    brightness(1.05) 
+    saturate(1.1);
+}
+
+.gallery-image.strong-remove-white {
+  filter: 
+    contrast(1.2) 
+    brightness(1.1) 
+    saturate(1.15);
+}
+
+/* Project Sections */
+.project-section {
+  width: 100%;
+  margin-bottom: 80px;
+}
+
+.project-title {
+  font-size: 1.5rem;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  text-align: center;
+  margin-bottom: 40px;
+  color: #666;
+  text-transform: uppercase;
+  position: relative;
+}
+
+.project-title::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 2px;
+  background: #333;
+}
+
+/* Section Separators */
+.section-separator {
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(to right, transparent, #ddd, transparent);
+  margin: 60px 0;
+}
+
+/* Zoom Modal */
+.zoom-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  cursor: pointer;
+}
+
+.zoom-modal img {
+  max-width: 95%;
+  max-height: 95%;
+  object-fit: contain;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.zoom-controls {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.zoom-btn {
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: #333;
+  transition: all 0.3s ease;
+}
+
+.zoom-btn:hover {
+  background: #fff;
+  transform: scale(1.1);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .gallery-table {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+  }
+  
+  .gallery-item.hero,
+  .gallery-item.panoramic {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .implements-content {
+    padding: 40px 20px 20px;
+  }
+
+  .implements-title {
+    font-size: 2rem;
+    margin-bottom: 40px;
+  }
+
+  .gallery-table {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+  }
+  
+  .gallery-item.wide,
+  .gallery-item.featured,
+  .gallery-item.hero,
+  .gallery-item.panoramic {
+    grid-column: span 1;
+  }
+  
+  .gallery-item.small {
+    height: 150px;
+  }
+  
+  .gallery-item.medium {
+    height: 200px;
+  }
+  
+  .gallery-item.large {
+    height: 250px;
+  }
+  
+  .gallery-item.tall {
+    height: 280px;
+  }
+  
+  .gallery-item.featured {
+    height: 220px;
+  }
+  
+  .gallery-item.hero {
+    height: 200px;
+  }
+  
+  .gallery-item.square {
+    height: 180px;
+  }
+  
+  .gallery-item.panoramic {
+    height: 150px;
+  }
+
+  .zoom-controls {
+    top: 10px;
+    right: 10px;
+  }
+
+  .zoom-btn {
+    width: 35px;
+    height: 35px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .implements-content {
+    padding: 30px 15px 15px;
+  }
+
+  .implements-title {
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+  }
+
+  .gallery-table {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  
+  .gallery-item {
+    height: 120px !important;
+  }
+}
