@@ -8,11 +8,13 @@ import PlanningSolution from './components/PlanningSolution';
 import Drawings from './components/Drawings';
 import Details from './components/Details';
 import Implements from './components/Implements';
+import ScrollToTop from './components/ScrollToTop';
 import './App.css';
 
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <div className="App">
         <Routes>
           <Route path="/" element={

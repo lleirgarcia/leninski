@@ -6,6 +6,7 @@ import './Implements.css';
 
 const Implements = () => {
   const [zoomedImage, setZoomedImage] = useState(null);
+  const [imageDimensions, setImageDimensions] = useState({});
   const { ref, inView } = useInView({
     threshold: 0.1,
     triggerOnce: true
@@ -121,27 +122,108 @@ const Implements = () => {
               </motion.h2>
 
               {/* Gallery Table for this section */}
-              <div className="gallery-table">
-                {section.images.map((image, imageIndex) => (
-                  <motion.div
-                    key={`${sectionIndex}-${imageIndex}`}
-                    className={`gallery-item ${image.size}`}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                    transition={{ 
-                      duration: 0.6, 
-                      delay: 0.6 + (sectionIndex * 0.2) + (imageIndex * 0.05)
-                    }}
-                    onClick={() => handleImageClick(image.src)}
-                  >
-                    <img
-                      src={image.src}
-                      alt={image.alt}
-                      className={`gallery-image ${image.removeWhite}`}
-                      onError={(e) => e.target.style.display = 'none'}
-                    />
-                  </motion.div>
-                ))}
+              <div className={`gallery-table ${section.title === 'IN PROCESS' ? 'linear-grid' : ''} ${section.title === 'IZAKAYA' ? 'mosaic-grid' : ''}`}>
+                {section.images.map((image, imageIndex) => {
+                  const dimensionKey = `${section.title}-${imageIndex}`;
+                  const dimensions = imageDimensions[dimensionKey];
+                  
+                  // Calculate grid spans based on actual image dimensions for IZAKAYA
+                  let gridStyle = {};
+                  if (section.title === 'IZAKAYA') {
+                    if (dimensions && dimensions.columnSpan && dimensions.rowSpan) {
+                      // Use calculated spans from loaded image
+                      gridStyle = {
+                        gridColumn: `span ${dimensions.columnSpan}`,
+                        gridRow: `span ${dimensions.rowSpan}`
+                      };
+                    } else {
+                      // Default spans while image loads
+                      gridStyle = {
+                        gridColumn: 'span 2',
+                        gridRow: 'span 10'
+                      };
+                    }
+                  }
+                  
+                  return (
+                    <motion.div
+                      key={`${sectionIndex}-${imageIndex}`}
+                      className={`gallery-item ${image.size}`}
+                      style={gridStyle}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                      transition={{ 
+                        duration: 0.6, 
+                        delay: 0.6 + (sectionIndex * 0.2) + (imageIndex * 0.05)
+                      }}
+                      onClick={() => handleImageClick(image.src)}
+                    >
+                      <img
+                        src={image.src}
+                        alt={image.alt}
+                        className={`gallery-image ${image.removeWhite}`}
+                        onError={(e) => e.target.style.display = 'none'}
+                        onLoad={(e) => {
+                          if (section.title === 'IZAKAYA' && !imageDimensions[dimensionKey]) {
+                            const img = e.target;
+                            const key = dimensionKey;
+                            const aspectRatio = img.naturalWidth / img.naturalHeight;
+                            
+                            // Calculate spans based on aspect ratio for precise fitting without gaps
+                            // Use window width or default to max-width
+                            const containerWidth = Math.min(window.innerWidth - 80, 1400); // Account for padding
+                            
+                            // Grid configuration - 8 columns on desktop
+                            const gridColumns = window.innerWidth > 1200 ? 8 : (window.innerWidth > 768 ? 6 : 4);
+                            const rowHeight = 5; // Match grid-auto-rows
+                            const columnWidth = containerWidth / gridColumns;
+                            
+                            // Target size for images to fill space efficiently
+                            const targetArea = 120000; // Target area in pixels^2
+                            const targetWidth = Math.sqrt(targetArea * aspectRatio);
+                            const targetHeight = targetWidth / aspectRatio;
+                            
+                            // Calculate optimal column span and row span
+                            let columnSpan = Math.round(targetWidth / columnWidth);
+                            columnSpan = Math.max(1, Math.min(columnSpan, gridColumns));
+                            
+                            // Calculate row span to maintain aspect ratio exactly
+                            const imageWidth = columnWidth * columnSpan;
+                            const imageHeight = imageWidth / aspectRatio;
+                            let rowSpan = Math.round(imageHeight / rowHeight);
+                            
+                            // Ensure minimum sizes and adjust to avoid gaps
+                            columnSpan = Math.max(1, Math.min(columnSpan, gridColumns));
+                            rowSpan = Math.max(10, rowSpan);
+                            
+                            // Fine-tune to ensure images fit well together
+                            // Round to nearest values that work well with the grid
+                            if (aspectRatio > 2) {
+                              columnSpan = Math.min(6, columnSpan);
+                            } else if (aspectRatio > 1.5) {
+                              columnSpan = Math.min(4, columnSpan);
+                            } else if (aspectRatio > 1) {
+                              columnSpan = Math.min(3, columnSpan);
+                            } else {
+                              columnSpan = Math.min(2, columnSpan);
+                            }
+                            
+                            setImageDimensions(prev => ({
+                              ...prev,
+                              [key]: {
+                                width: img.naturalWidth,
+                                height: img.naturalHeight,
+                                aspectRatio: aspectRatio,
+                                columnSpan: columnSpan,
+                                rowSpan: rowSpan
+                              }
+                            }));
+                          }
+                        }}
+                      />
+                    </motion.div>
+                  );
+                })}
               </div>
 
               {/* Section Separator (except for last section) */}

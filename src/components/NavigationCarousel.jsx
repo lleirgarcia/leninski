@@ -34,13 +34,13 @@ const NavigationCarousel = () => {
     {
       id: 3,
       title: 'DETAILS',
-      image: '/details/01.png',
+      image: '/details/details.png',
       alt: 'Details'
     },
     {
       id: 4,
       title: 'IMPLEMENTS',
-      image: '/IMPLEMENT/IZAKAYA/01.jpg',
+      image: '/IMPLEMENT/IZAKAYA/5.jpg',
       alt: 'Implements'
     }
   ];
@@ -77,7 +77,7 @@ const NavigationCarousel = () => {
         >
           <Swiper
             modules={[Navigation, Pagination]}
-            spaceBetween={30}
+            spaceBetween={20}
             slidesPerView={3}
             navigation={true}
             pagination={{ clickable: true }}
@@ -85,15 +85,15 @@ const NavigationCarousel = () => {
             breakpoints={{
               320: {
                 slidesPerView: 1,
-                spaceBetween: 20
+                spaceBetween: 15
               },
               768: {
                 slidesPerView: 2,
-                spaceBetween: 30
+                spaceBetween: 20
               },
               1024: {
                 slidesPerView: 3,
-                spaceBetween: 30
+                spaceBetween: 20
               }
             }}
             className="nav-carousel"
