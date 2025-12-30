@@ -22,32 +22,32 @@ const Implements = () => {
   // Images organized by projects
   const projectSections = [
     {
-      title: 'IZAKAYA',
+      title: 'VIRGIN IZAKAYA BAR DUBAI',
       images: [
         { src: '/IMPLEMENT/IZAKAYA/001.png', alt: 'Izakaya 1', size: 'featured', removeWhite: '' },
         { src: '/IMPLEMENT/IZAKAYA/002.png', alt: 'Izakaya 2', size: 'tall', removeWhite: '' }
       ]
     },
     {
-      title: 'BLOGERS',
+      title: 'BLOGER´S HOUSE',
       images: [
         { src: '/IMPLEMENT/blogers/001.png', alt: 'Blogers 1', size: 'featured', removeWhite: 'strong-remove-white' },
         { src: '/IMPLEMENT/blogers/002.png', alt: 'Blogers 2', size: 'large', removeWhite: 'strong-remove-white' }
       ]
     },
     {
-      title: 'ZELINSKIY',
+      title: 'ZIELINSKI & ROZEN, KYIV',
       images: [
         { src: '/IMPLEMENT/ZELINSKIY/001.png', alt: 'Zelinskiy 1', size: 'large', removeWhite: 'strong-remove-white' }
       ]
     },
     {
-      title: 'IN PROCESS',
+      title: 'IN PROCESS. APARTMENT AT "ONE PALM" DUBAI',
       images: [
-        { src: '/IMPLEMENT/IN PROCESS/001.png', alt: 'Implementation 1', size: 'large', removeWhite: 'strong-remove-white' },
-        { src: '/IMPLEMENT/IN PROCESS/002.png', alt: 'Implementation 2', size: 'medium', removeWhite: 'strong-remove-white' },
-        { src: '/IMPLEMENT/IN PROCESS/003.png', alt: 'Implementation 3', size: 'medium', removeWhite: 'strong-remove-white' },
-        { src: '/IMPLEMENT/IN PROCESS/004.png', alt: 'Implementation 4', size: 'wide', removeWhite: 'strong-remove-white' }
+        { src: '/IMPLEMENT/IN PROCESS/1 (1).png', alt: 'Implementation 1', size: 'large', removeWhite: 'strong-remove-white' },
+        { src: '/IMPLEMENT/IN PROCESS/2 (1).png', alt: 'Implementation 2', size: 'medium', removeWhite: 'strong-remove-white' },
+        { src: '/IMPLEMENT/IN PROCESS/3 (1).png', alt: 'Implementation 3', size: 'medium', removeWhite: 'strong-remove-white' },
+        { src: '/IMPLEMENT/IN PROCESS/4.png', alt: 'Implementation 4', size: 'wide', removeWhite: 'strong-remove-white' }
       ]
     }
   ];
@@ -103,7 +103,7 @@ const Implements = () => {
                 {section.images.map((image, imageIndex) => (
                   <motion.div
                     key={`${sectionIndex}-${imageIndex}`}
-                    className={`gallery-item ${image.size} ${section.title === 'BLOGERS' && imageIndex === 1 ? 'blogers-second-image' : ''} ${section.title === 'IZAKAYA' && imageIndex === 1 ? 'izakaya-second-image' : ''}`}
+                    className={`gallery-item ${image.size} ${section.title === 'BLOGERS' && imageIndex === 1 ? 'blogers-second-image' : ''} ${section.title === 'IZAKAYA' && imageIndex === 1 ? 'izakaya-second-image' : ''} ${imageIndex > 0 ? 'image-with-top-margin' : ''}`}
                     initial={{ opacity: 1, y: 0 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ 

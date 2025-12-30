@@ -179,6 +179,11 @@
   margin-top: 5mm;
 }
 
+/* All images except the first one - 5mm top margin */
+.gallery-item.image-with-top-margin {
+  margin-top: 5mm;
+}
+
 /* White background removal for PNG images */
 .gallery-image.remove-white {
   filter: 

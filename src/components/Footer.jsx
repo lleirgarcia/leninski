@@ -26,7 +26,7 @@ const Footer = () => {
               transition={{ duration: 0.8, delay: 0.2 }}
             >
               <h3 className="contact-title">EMAIL</h3>
-              <p className="contact-text">lena.rog@architect.com</p>
+              <p className="contact-text">roglenusia@gmail.com</p>
             </motion.div>
             
             <motion.div 
@@ -36,7 +36,7 @@ const Footer = () => {
               transition={{ duration: 0.8, delay: 0.4 }}
             >
               <h3 className="contact-title">PHONE</h3>
-              <p className="contact-text">+1 (555) 234-5678</p>
+              <p className="contact-text">+34 611 76 36 15 / +380 95 80 18 718</p>
             </motion.div>
             
             <motion.div 
@@ -47,7 +47,7 @@ const Footer = () => {
             >
               <h3 className="contact-title">SOCIAL</h3>
               <div className="social-links">
-                <a href="#" className="social-link">LinkedIn</a>
+                <a href="https://www.linkedin.com/in/roglenusia/" className="social-link">LinkedIn</a>
               </div>
             </motion.div>
           </div>

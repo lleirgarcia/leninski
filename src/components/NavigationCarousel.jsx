@@ -40,7 +40,7 @@ const NavigationCarousel = () => {
     {
       id: 4,
       title: 'IMPLEMENTS',
-      image: '/IMPLEMENT/IZAKAYA/5.jpg',
+      image: '/IMPLEMENT/5.jpg',
       alt: 'Implements'
     }
   ];
