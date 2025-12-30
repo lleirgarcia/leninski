@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
@@ -13,6 +13,7 @@ import './NavigationCarousel.css';
 
 const NavigationCarousel = () => {
   const navigate = useNavigate();
+  const swiperRef = useRef(null);
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1
@@ -45,6 +46,9 @@ const NavigationCarousel = () => {
     }
   ];
 
+  // Duplicar categorías para el loop infinito
+  const duplicatedCategories = [...categories, ...categories];
+
   const handleCategoryClick = (category) => {
     console.log('Category clicked:', category.title);
     
@@ -75,45 +79,91 @@ const NavigationCarousel = () => {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
         >
-          <Swiper
-            modules={[Navigation, Pagination]}
-            spaceBetween={20}
-            slidesPerView={3}
-            navigation={true}
-            pagination={{ clickable: true }}
-            loop={true}
-            breakpoints={{
-              320: {
-                slidesPerView: 1,
-                spaceBetween: 15
-              },
-              768: {
-                slidesPerView: 2,
-                spaceBetween: 20
-              },
-              1024: {
-                slidesPerView: 3,
-                spaceBetween: 20
-              }
-            }}
-            className="nav-carousel"
-          >
-            {categories.map((category) => (
-              <SwiperSlide key={category.id}>
-                <motion.div 
-                  className="nav-category"
-                  whileHover={{ scale: 1.01 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => handleCategoryClick(category)}
-                >
-                  <h3 className="nav-title">{category.title}</h3>
-                  <div className="nav-image">
-                    <img src={category.image} alt={category.alt} className="nav-image-real" />
-                  </div>
-                </motion.div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
+          <div className="carousel-wrapper">
+            <button 
+              className="custom-nav-button custom-nav-button-prev"
+              onClick={() => {
+                if (swiperRef.current) {
+                  swiperRef.current.slidePrev();
+                }
+              }}
+              aria-label="Previous slide"
+            >
+              ‹
+            </button>
+            <Swiper
+              onSwiper={(swiper) => {
+                swiperRef.current = swiper;
+                // Iniciar en el primer slide del primer grupo
+                if (swiper) {
+                  swiper.slideToLoop(0);
+                }
+              }}
+              modules={[Navigation, Pagination]}
+              spaceBetween={20}
+              slidesPerView={3}
+              slidesPerGroup={1}
+              navigation={false}
+              pagination={false}
+              loop={true}
+              loopPreventsSliding={false}
+              watchOverflow={false}
+              loopAdditionalSlides={2}
+              loopedSlides={4}
+              speed={600}
+              breakpoints={{
+                320: {
+                  slidesPerView: 3,
+                  spaceBetween: 10,
+                  slidesPerGroup: 1,
+                  loopAdditionalSlides: 2,
+                  loopedSlides: 4
+                },
+                768: {
+                  slidesPerView: 3,
+                  spaceBetween: 15,
+                  slidesPerGroup: 1,
+                  loopAdditionalSlides: 2,
+                  loopedSlides: 4
+                },
+                1024: {
+                  slidesPerView: 3,
+                  spaceBetween: 20,
+                  slidesPerGroup: 1,
+                  loopAdditionalSlides: 2,
+                  loopedSlides: 4
+                }
+              }}
+              className="nav-carousel"
+            >
+              {duplicatedCategories.map((category, index) => (
+                <SwiperSlide key={`${category.id}-${index}`}>
+                  <motion.div 
+                    className="nav-category"
+                    whileHover={{ scale: 1.01 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => handleCategoryClick(category)}
+                  >
+                    <h3 className="nav-title">{category.title}</h3>
+                    <div className="nav-image">
+                      <img src={category.image} alt={category.alt} className="nav-image-real" />
+                    </div>
+                  </motion.div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+            <button 
+              className="custom-nav-button custom-nav-button-next"
+              onClick={() => {
+                if (swiperRef.current) {
+                  swiperRef.current.slideNext();
+                }
+              }}
+              aria-label="Next slide"
+            >
+              ›
+            </button>
+          </div>
         </motion.div>
       </div>
     </section>

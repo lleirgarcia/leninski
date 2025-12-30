@@ -47,7 +47,7 @@ const Footer = () => {
             >
               <h3 className="contact-title">SOCIAL</h3>
               <div className="social-links">
-                <a href="https://www.linkedin.com/in/roglenusia/" className="social-link">LinkedIn</a>
+                <a href="https://www.linkedin.com/in/lena-rog-0b1763160" className="social-link">LinkedIn</a>
               </div>
             </motion.div>
           </div>
