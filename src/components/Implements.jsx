@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Link } from 'react-router-dom';
+import Footer from './Footer';
 import './Implements.css';
 
 const Implements = () => {
@@ -160,6 +161,9 @@ const Implements = () => {
           />
         </motion.div>
       )}
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 };
