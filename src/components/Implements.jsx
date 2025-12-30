@@ -32,23 +32,23 @@ const Implements = () => {
     {
       title: 'BLOGER´S HOUSE',
       images: [
-        { src: '/IMPLEMENT/blogers/001.png', alt: 'Blogers 1', size: 'featured', removeWhite: 'strong-remove-white' },
-        { src: '/IMPLEMENT/blogers/002.png', alt: 'Blogers 2', size: 'large', removeWhite: 'strong-remove-white' }
+        { src: '/IMPLEMENT/blogers/001.png', alt: 'Blogers 1', size: 'featured', removeWhite: '' },
+        { src: '/IMPLEMENT/blogers/002.png', alt: 'Blogers 2', size: 'large', removeWhite: '' }
       ]
     },
     {
       title: 'ZIELINSKI & ROZEN, KYIV',
       images: [
-        { src: '/IMPLEMENT/ZELINSKIY/001.png', alt: 'Zelinskiy 1', size: 'large', removeWhite: 'strong-remove-white' }
+        { src: '/IMPLEMENT/ZELINSKIY/001.png', alt: 'Zelinskiy 1', size: 'large', removeWhite: '' }
       ]
     },
     {
       title: 'IN PROCESS. APARTMENT AT "ONE PALM" DUBAI',
       images: [
-        { src: '/IMPLEMENT/IN PROCESS/1 (1).png', alt: 'Implementation 1', size: 'large', removeWhite: 'strong-remove-white' },
-        { src: '/IMPLEMENT/IN PROCESS/2 (1).png', alt: 'Implementation 2', size: 'medium', removeWhite: 'strong-remove-white' },
-        { src: '/IMPLEMENT/IN PROCESS/3 (1).png', alt: 'Implementation 3', size: 'medium', removeWhite: 'strong-remove-white' },
-        { src: '/IMPLEMENT/IN PROCESS/4.png', alt: 'Implementation 4', size: 'wide', removeWhite: 'strong-remove-white' }
+        { src: '/IMPLEMENT/IN PROCESS/1 (1).png', alt: 'Implementation 1', size: 'large', removeWhite: '' },
+        { src: '/IMPLEMENT/IN PROCESS/2 (1).png', alt: 'Implementation 2', size: 'medium', removeWhite: '' },
+        { src: '/IMPLEMENT/IN PROCESS/3 (1).png', alt: 'Implementation 3', size: 'medium', removeWhite: '' },
+        { src: '/IMPLEMENT/IN PROCESS/4.png', alt: 'Implementation 4', size: 'wide', removeWhite: '' }
       ]
     }
   ];
@@ -147,18 +147,25 @@ const Implements = () => {
           exit={{ opacity: 0 }}
           onClick={closeZoom}
         >
-          <div className="zoom-controls">
+          <div className="zoom-controls" onClick={(e) => e.stopPropagation()}>
             <button className="zoom-btn" onClick={closeZoom}>
               ×
             </button>
           </div>
-          <motion.img
-            src={zoomedImage}
-            alt="Zoomed implementation"
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.3 }}
-          />
+          <motion.div
+            className="zoom-image-wrapper"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.2 }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={zoomedImage}
+              alt="Zoomed implementation"
+              className="zoomed-image-original"
+              key={zoomedImage}
+            />
+          </motion.div>
         </motion.div>
       )}
 

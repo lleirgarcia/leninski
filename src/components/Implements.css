@@ -249,13 +249,37 @@
   justify-content: center;
   z-index: 1000;
   cursor: pointer;
+  color-scheme: light;
 }
 
-.zoom-modal img {
+.zoom-image-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.zoom-modal img,
+.zoomed-image-original {
   max-width: 95%;
   max-height: 95%;
+  width: auto;
+  height: auto;
   object-fit: contain;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  filter: none !important;
+  -webkit-filter: none !important;
+  image-rendering: auto !important;
+  transform: none !important;
+  opacity: 1 !important;
+  background: transparent !important;
+  display: block;
+  /* Ensure proper color rendering */
+  color-adjust: exact !important;
+  -webkit-print-color-adjust: exact !important;
+  /* Prevent any color space conversion */
+  image-orientation: from-image;
 }
 
 .zoom-controls {
@@ -264,26 +288,40 @@
   right: 20px;
   display: flex;
   gap: 10px;
+  z-index: 1001;
 }
 
 .zoom-btn {
-  background: rgba(255, 255, 255, 0.9);
-  border: none;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: #333;
+  font-weight: 300;
   transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  line-height: 1;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+  position: relative;
 }
 
 .zoom-btn:hover {
-  background: #fff;
-  transform: scale(1.1);
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(0, 0, 0, 0.3);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+}
+
+.zoom-btn.close {
+  font-size: 1.2rem;
+  font-weight: 300;
 }
 
 /* Responsive Design */
@@ -347,9 +385,13 @@
   }
 
   .zoom-btn {
-    width: 35px;
-    height: 35px;
-    font-size: 1rem;
+    width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+  }
+  
+  .zoom-btn.close {
+    font-size: 1.1rem;
   }
 }
 
