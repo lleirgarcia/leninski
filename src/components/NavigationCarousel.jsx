@@ -34,7 +34,7 @@ const NavigationCarousel = () => {
     {
       id: 3,
       title: 'DETAILS',
-      image: '/details/details.png',
+      image: '/details/1-1.png',
       alt: 'Details'
     },
     {

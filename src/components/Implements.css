@@ -10,10 +10,14 @@
 
 .implements-content {
   flex: 1;
-  padding: 60px 40px 40px;
+  padding: 60px 0 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.implements-content > * {
+  width: 100%;
 }
 
 .implements-title {
@@ -29,18 +33,19 @@
 /* Gallery Table Layout */
 .gallery-table {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
+  grid-template-columns: 1fr;
+  gap: 0;
   width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 20px 0;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  margin-top: 40px;
 }
 
 /* Linear grid for IN PROCESS section - one image per line */
 .gallery-table.linear-grid {
   grid-template-columns: 1fr;
-  gap: 30px;
+  gap: 0;
 }
 
 .gallery-table.linear-grid .gallery-item {
@@ -53,33 +58,28 @@
 .gallery-table.linear-grid .gallery-image {
   width: 100%;
   height: auto;
-  max-height: 400px;
   object-fit: contain;
 }
 
 /* Mosaic grid for IZAKAYA section - dense masonry layout */
 .gallery-table.mosaic-grid {
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  grid-auto-rows: 5px;
-  grid-auto-flow: row dense;
+  grid-template-columns: 1fr;
   gap: 0;
   padding: 0 !important;
   width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
+  max-width: 100%;
+  margin: 0;
 }
 
 .gallery-table.mosaic-grid .gallery-item {
   width: 100%;
-  height: 100%;
-  overflow: hidden;
+  min-height: 100px;
+  overflow: visible;
   box-shadow: none;
   margin: 0;
   padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: block;
   position: relative;
   background: transparent;
 }
@@ -92,7 +92,7 @@
 
 .gallery-table.mosaic-grid .gallery-image {
   width: 100%;
-  height: 100%;
+  height: auto;
   object-fit: contain;
   display: block;
   margin: 0;
@@ -104,138 +104,79 @@
   transition: transform 0.3s ease;
 }
 
-/* Mosaic grid size definitions - each size spans different rows/columns */
-.gallery-table.mosaic-grid .gallery-item.small {
-  grid-column: span 1;
-  grid-row: span 8; /* 160px */
-}
-
-.gallery-table.mosaic-grid .gallery-item.medium {
-  grid-column: span 2;
-  grid-row: span 10; /* 200px */
-}
-
-.gallery-table.mosaic-grid .gallery-item.large {
-  grid-column: span 2;
-  grid-row: span 14; /* 280px */
-}
-
-.gallery-table.mosaic-grid .gallery-item.wide {
-  grid-column: span 3;
-  grid-row: span 8; /* 160px */
-}
-
-.gallery-table.mosaic-grid .gallery-item.tall {
-  grid-column: span 1;
-  grid-row: span 18; /* 360px */
-}
-
-.gallery-table.mosaic-grid .gallery-item.featured {
-  grid-column: span 3;
-  grid-row: span 12; /* 240px */
-}
-
-.gallery-table.mosaic-grid .gallery-item.hero {
-  grid-column: span 4;
-  grid-row: span 16; /* 320px */
-}
-
-.gallery-table.mosaic-grid .gallery-item.square {
-  grid-column: span 2;
-  grid-row: span 10; /* 200px - square aspect ratio */
-}
-
+/* Mosaic grid size definitions - all full width */
+.gallery-table.mosaic-grid .gallery-item.small,
+.gallery-table.mosaic-grid .gallery-item.medium,
+.gallery-table.mosaic-grid .gallery-item.large,
+.gallery-table.mosaic-grid .gallery-item.wide,
+.gallery-table.mosaic-grid .gallery-item.tall,
+.gallery-table.mosaic-grid .gallery-item.featured,
+.gallery-table.mosaic-grid .gallery-item.hero,
+.gallery-table.mosaic-grid .gallery-item.square,
 .gallery-table.mosaic-grid .gallery-item.panoramic {
-  grid-column: span 4;
-  grid-row: span 6; /* 120px */
+  grid-column: span 1 !important;
+  width: 100%;
+  height: auto;
 }
 
 /* Image Container Base */
 .gallery-item {
   position: relative;
-  overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  overflow: visible;
+  box-shadow: none;
   transition: all 0.3s ease;
   cursor: pointer;
-  background: #f8f8f8;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: #ffffff;
+  display: block;
+  width: 100%;
+  min-height: 100px;
 }
 
 .gallery-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  transform: none;
+  box-shadow: none;
 }
 
 /* Gallery Image */
 .gallery-image {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
   object-position: center;
   transition: all 0.3s ease;
+  display: block;
+  margin: 0;
+  padding: 0;
 }
 
 .gallery-image:hover {
-  transform: scale(1.05);
+  transform: none;
 }
 
-/* Different Dimensions for Gallery Items */
-
-/* Small items - 200px height */
-.gallery-item.small {
-  height: 200px;
-}
-
-/* Medium items - 280px height */
-.gallery-item.medium {
-  height: 280px;
-}
-
-/* Large items - 360px height */
-.gallery-item.large {
-  height: 360px;
-}
-
-/* Wide items - span 2 columns, 240px height */
-.gallery-item.wide {
-  grid-column: span 2;
-  height: 240px;
-}
-
-/* Override grid-column spans for linear grid */
-.gallery-table.linear-grid .gallery-item {
+/* Different Dimensions for Gallery Items - All full width */
+.gallery-item.small,
+.gallery-item.medium,
+.gallery-item.large,
+.gallery-item.wide,
+.gallery-item.tall,
+.gallery-item.featured,
+.gallery-item.hero,
+.gallery-item.square,
+.gallery-item.panoramic {
+  width: 100%;
+  min-height: 100px;
   grid-column: span 1 !important;
 }
 
-/* Tall items - 400px height */
-.gallery-item.tall {
-  height: 400px;
+/* Second image of BLOGERS section - 5mm top margin */
+.gallery-item.blogers-second-image {
+  margin-top: 5mm;
 }
 
-/* Featured items - span 2 columns, 320px height */
-.gallery-item.featured {
-  grid-column: span 2;
-  height: 320px;
-}
-
-/* Hero items - span 3 columns, 400px height */
-.gallery-item.hero {
-  grid-column: span 3;
-  height: 400px;
-}
-
-/* Square items - aspect ratio 1:1 */
-.gallery-item.square {
-  height: 250px;
-  aspect-ratio: 1;
-}
-
-/* Panoramic items - span 3 columns, 200px height */
-.gallery-item.panoramic {
-  grid-column: span 3;
-  height: 200px;
+/* Second image of IZAKAYA section - 5mm top margin */
+.gallery-item.izakaya-second-image {
+  margin-top: 5mm;
 }
 
 /* White background removal for PNG images */
@@ -257,6 +198,7 @@
 .project-section {
   width: 100%;
   margin-bottom: 80px;
+  padding-top: 40px;
 }
 
 .project-title {
@@ -342,24 +284,23 @@
 /* Responsive Design */
 @media (max-width: 1200px) {
   .gallery-table {
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 15px;
+    grid-template-columns: 1fr;
+    gap: 0;
   }
   
   .gallery-item.hero,
   .gallery-item.panoramic {
-    grid-column: span 2;
+    grid-column: span 1 !important;
   }
 
   .gallery-table.mosaic-grid {
-    grid-template-columns: repeat(6, 1fr);
-    grid-auto-rows: 5px;
+    grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 768px) {
   .implements-content {
-    padding: 40px 20px 20px;
+    padding: 40px 0 20px;
   }
 
   .implements-title {
@@ -368,52 +309,31 @@
   }
 
   .gallery-table {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 12px;
+    grid-template-columns: 1fr;
+    gap: 0;
   }
   
   .gallery-item.wide,
   .gallery-item.featured,
   .gallery-item.hero,
   .gallery-item.panoramic {
-    grid-column: span 1;
+    grid-column: span 1 !important;
+    height: auto;
   }
   
-  .gallery-item.small {
-    height: 150px;
-  }
-  
-  .gallery-item.medium {
-    height: 200px;
-  }
-  
-  .gallery-item.large {
-    height: 250px;
-  }
-  
-  .gallery-item.tall {
-    height: 280px;
-  }
-  
-  .gallery-item.featured {
-    height: 220px;
-  }
-  
-  .gallery-item.hero {
-    height: 200px;
-  }
-  
-  .gallery-item.square {
-    height: 180px;
-  }
-  
+  .gallery-item.small,
+  .gallery-item.medium,
+  .gallery-item.large,
+  .gallery-item.tall,
+  .gallery-item.featured,
+  .gallery-item.hero,
+  .gallery-item.square,
   .gallery-item.panoramic {
-    height: 150px;
+    height: auto;
   }
 
   .gallery-table.mosaic-grid {
-    grid-template-columns: repeat(4, 1fr);
-    grid-auto-rows: 5px;
+    grid-template-columns: 1fr;
   }
 
   .zoom-controls {
@@ -430,7 +350,7 @@
 
 @media (max-width: 480px) {
   .implements-content {
-    padding: 30px 15px 15px;
+    padding: 30px 0 15px;
   }
 
   .implements-title {
@@ -439,16 +359,15 @@
   }
 
   .gallery-table {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+    grid-template-columns: 1fr;
+    gap: 0;
   }
   
   .gallery-item {
-    height: 120px !important;
+    height: auto !important;
   }
 
   .gallery-table.mosaic-grid {
-    grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: 5px;
+    grid-template-columns: 1fr;
   }
 }
