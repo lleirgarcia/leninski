@@ -188,12 +188,16 @@ const Drawings = () => {
           
           let scale;
           if (imgAspectRatio > viewportAspectRatio) {
-            // Imagen más ancha - ajustar al ancho del viewport
-            scale = (viewportWidth * 0.9) / img.naturalWidth;
+            // Imagen más ancha - ajustar al ancho del viewport (usar 1.0 para cubrir completamente)
+            scale = viewportWidth / img.naturalWidth;
           } else {
-            // Imagen más alta - ajustar al alto del viewport
-            scale = (viewportHeight * 0.9) / img.naturalHeight;
+            // Imagen más alta - ajustar al alto del viewport (usar 1.0 para cubrir completamente)
+            scale = viewportHeight / img.naturalHeight;
           }
+          
+          // Asegurar que la imagen siempre cubra el viewport completamente
+          // Multiplicar por un factor para que sea ligeramente más grande
+          scale = scale * 1.1;
           
           setInitialScale(scale);
         }
