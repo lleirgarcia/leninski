@@ -18,49 +18,112 @@ const PlanningSolution = () => {
   }, []);
 
   const [zoomedImage, setZoomedImage] = useState(null);
-  const [zoomLevel, setZoomLevel] = useState(1);
+  const [zoomLevel, setZoomLevel] = useState(2); // Zoom inicial: 2x (zoom +1)
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const imageRef = useRef(null);
+  const [initialScale, setInitialScale] = useState(0); // Se calculará cuando la imagen cargue
+  const [isLoading, setIsLoading] = useState(false); // Estado para el loader
+  
+  // 2 niveles de zoom fijos: 2x, 3x
+  const zoomLevels = [2, 3];
 
   const handleImageClick = (imageSrc) => {
     setZoomedImage(imageSrc);
-    setZoomLevel(1);
+    setZoomLevel(2); // Abrir en zoom 2x (zoom +1) por defecto
     setPosition({ x: 0, y: 0 });
+    setInitialScale(0); // Reset initial scale to 0, will be calculated on load
+    setIsLoading(true); // Activar loader
+    
+    // Desactivar loader después de 0.8 segundos
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 800);
   };
 
   const closeZoom = () => {
     setZoomedImage(null);
-    setZoomLevel(1);
+    setZoomLevel(2); // Reset a zoom 2x para la próxima vez que se abra
     setPosition({ x: 0, y: 0 });
+    setIsLoading(false); // Desactivar loader al cerrar
   };
 
   const handleZoomIn = (e) => {
     e.stopPropagation();
-    setZoomLevel(prev => Math.min(prev + 0.5, 5));
+    e.preventDefault();
+    setZoomLevel((prev) => {
+      // Encuentra el índice actual en zoomLevels
+      let currentIndex = zoomLevels.findIndex(level => Math.abs(level - prev) < 0.1);
+      
+      // Si no encuentra el índice exacto, busca el más cercano
+      if (currentIndex === -1) {
+        currentIndex = zoomLevels.reduce((closest, level, index) => {
+          return Math.abs(level - prev) < Math.abs(zoomLevels[closest] - prev) ? index : closest;
+        }, 0);
+      }
+      
+      // Si no está en el último nivel, aumenta
+      if (currentIndex < zoomLevels.length - 1) {
+        return zoomLevels[currentIndex + 1];
+      }
+      // Si ya está en el último nivel, mantén el nivel actual
+      return zoomLevels[currentIndex];
+    });
   };
 
   const handleZoomOut = (e) => {
     e.stopPropagation();
-    setZoomLevel(prev => Math.max(prev - 0.5, 0.5));
+    e.preventDefault();
+    setZoomLevel((prev) => {
+      // Encuentra el índice actual en zoomLevels
+      let currentIndex = zoomLevels.findIndex(level => Math.abs(level - prev) < 0.1);
+      
+      // Si no encuentra el índice exacto, busca el más cercano
+      if (currentIndex === -1) {
+        currentIndex = zoomLevels.reduce((closest, level, index) => {
+          return Math.abs(level - prev) < Math.abs(zoomLevels[closest] - prev) ? index : closest;
+        }, 0);
+      }
+      
+      // Si no está en el primer nivel, disminuye
+      if (currentIndex > 0) {
+        return zoomLevels[currentIndex - 1];
+      }
+      // Si ya está en el primer nivel, mantén el nivel actual
+      return zoomLevels[currentIndex];
+    });
   };
+
 
   const handleMouseDown = (e) => {
     e.preventDefault();
     setIsDragging(true);
+    // Guardar la posición del cursor y la posición actual de la imagen
     setDragStart({
-      x: e.clientX - position.x,
-      y: e.clientY - position.y
+      x: e.clientX,
+      y: e.clientY
     });
   };
 
   const handleMouseMove = (e) => {
     if (isDragging) {
       e.preventDefault();
-      setPosition({
-        x: e.clientX - dragStart.x,
-        y: e.clientY - dragStart.y
+      // Use requestAnimationFrame for smoother updates
+      requestAnimationFrame(() => {
+        // Calcular el delta del movimiento y aplicar el factor de sensibilidad
+        const dragSensitivity = 2.0; // Factor de sensibilidad (mayor = más recorrido)
+        const deltaX = (e.clientX - dragStart.x) * dragSensitivity;
+        const deltaY = (e.clientY - dragStart.y) * dragSensitivity;
+        setPosition({
+          x: position.x + deltaX,
+          y: position.y + deltaY
+        });
+        // Actualizar dragStart para el próximo movimiento
+        setDragStart({
+          x: e.clientX,
+          y: e.clientY
+        });
       });
     }
   };
@@ -69,11 +132,142 @@ const PlanningSolution = () => {
     setIsDragging(false);
   };
 
-  const handleWheel = (e) => {
-    e.preventDefault();
-    const delta = e.deltaY > 0 ? -0.2 : 0.2;
-    setZoomLevel(prev => Math.max(0.5, Math.min(5, prev + delta)));
-  };
+  // Add global mouse move and up listeners for smoother dragging
+  useEffect(() => {
+    if (isDragging) {
+      const dragSensitivity = 2.0; // Factor de sensibilidad (mayor = más recorrido)
+      let lastMouseX = dragStart.x;
+      let lastMouseY = dragStart.y;
+      
+      const handleGlobalMouseMove = (e) => {
+        e.preventDefault();
+        requestAnimationFrame(() => {
+          // Calcular el delta del movimiento y aplicar el factor de sensibilidad
+          const deltaX = (e.clientX - lastMouseX) * dragSensitivity;
+          const deltaY = (e.clientY - lastMouseY) * dragSensitivity;
+          
+          setPosition((prevPosition) => ({
+            x: prevPosition.x + deltaX,
+            y: prevPosition.y + deltaY
+          }));
+          
+          // Actualizar lastMouse para el próximo movimiento
+          lastMouseX = e.clientX;
+          lastMouseY = e.clientY;
+        });
+      };
+
+      const handleGlobalMouseUp = () => {
+        setIsDragging(false);
+      };
+
+      window.addEventListener('mousemove', handleGlobalMouseMove, { passive: false });
+      window.addEventListener('mouseup', handleGlobalMouseUp);
+
+      return () => {
+        window.removeEventListener('mousemove', handleGlobalMouseMove);
+        window.removeEventListener('mouseup', handleGlobalMouseUp);
+      };
+    }
+  }, [isDragging, dragStart.x, dragStart.y]);
+
+
+  // Calcular scale inicial para que la imagen se vea completa
+  useEffect(() => {
+    if (zoomedImage && imageRef.current) {
+      const img = imageRef.current;
+      
+      // Ocultar la imagen inmediatamente para evitar efectos visuales extraños
+      img.style.opacity = '0';
+      
+      const calculateScale = () => {
+        if (img.complete && img.naturalWidth && img.naturalHeight) {
+          const viewportWidth = window.innerWidth;
+          const viewportHeight = window.innerHeight;
+          const imgAspectRatio = img.naturalWidth / img.naturalHeight;
+          const viewportAspectRatio = viewportWidth / viewportHeight;
+          
+          let scale;
+          if (imgAspectRatio > viewportAspectRatio) {
+            // Imagen más ancha - ajustar al ancho del viewport
+            scale = (viewportWidth * 0.9) / img.naturalWidth;
+          } else {
+            // Imagen más alta - ajustar al alto del viewport
+            scale = (viewportHeight * 0.9) / img.naturalHeight;
+          }
+          
+          setInitialScale(scale);
+        }
+      };
+      
+      if (img.complete && img.naturalWidth && img.naturalHeight) {
+        calculateScale();
+      } else {
+        img.onload = calculateScale;
+      }
+    }
+  }, [zoomedImage]);
+
+  // Aplicar transform cuando cambia zoomLevel o position (solo si initialScale ya está calculado)
+  useEffect(() => {
+    if (zoomedImage && imageRef.current && initialScale > 0 && !isLoading) {
+      const img = imageRef.current;
+      if (img.complete && img.naturalWidth && img.naturalHeight) {
+        // Aplicar estilos de tamaño una sola vez
+        img.style.width = `${img.naturalWidth}px`;
+        img.style.height = `${img.naturalHeight}px`;
+        img.style.maxWidth = 'none';
+        img.style.maxHeight = 'none';
+        img.style.display = 'block';
+        
+        // Calcular el scale total: initialScale * zoomLevel
+        const totalScale = initialScale * zoomLevel;
+        const transform = `scale(${totalScale}) translate(${position.x}px, ${position.y}px)`;
+        img.style.setProperty('transform', transform, 'important');
+        
+        // Mostrar la imagen solo cuando todo esté listo y el loader haya terminado
+        requestAnimationFrame(() => {
+          img.style.opacity = '1';
+        });
+      }
+    } else if (zoomedImage && imageRef.current && isLoading) {
+      // Ocultar imagen mientras carga
+      const img = imageRef.current;
+      img.style.opacity = '0';
+    }
+  }, [zoomLevel, position, zoomedImage, initialScale, isLoading]);
+
+  // Agregar event listener no-pasivo para wheel
+  useEffect(() => {
+    if (zoomedImage) {
+      const zoomContent = document.querySelector('.zoom-content');
+      if (zoomContent) {
+        const wheelHandler = (e) => {
+          e.preventDefault();
+          const delta = e.deltaY > 0 ? -1 : 1;
+          setZoomLevel((prev) => {
+            let currentIndex = zoomLevels.findIndex(level => Math.abs(level - prev) < 0.1);
+            if (currentIndex === -1) {
+              currentIndex = zoomLevels.reduce((closest, level, index) => {
+                return Math.abs(level - prev) < Math.abs(zoomLevels[closest] - prev) ? index : closest;
+              }, 0);
+            }
+            // Permitir zoom in y zoom out
+            if (delta > 0 && currentIndex < zoomLevels.length - 1) {
+              return zoomLevels[currentIndex + 1]; // Zoom in
+            } else if (delta < 0 && currentIndex > 0) {
+              return zoomLevels[currentIndex - 1]; // Zoom out
+            }
+            return zoomLevels[currentIndex];
+          });
+        };
+        zoomContent.addEventListener('wheel', wheelHandler, { passive: false });
+        return () => {
+          zoomContent.removeEventListener('wheel', wheelHandler);
+        };
+      }
+    }
+  }, [zoomedImage, zoomLevels]);
 
   return (
     <>
@@ -201,17 +395,23 @@ const PlanningSolution = () => {
         {/* Interactive Zoom Modal */}
         {zoomedImage && (
           <div className="zoom-modal" onClick={closeZoom}>
+            {isLoading && (
+              <div className="zoom-loader" onClick={(e) => e.stopPropagation()}>
+                <div className="loader-spinner"></div>
+              </div>
+            )}
             <div className="zoom-controls" onClick={(e) => e.stopPropagation()}>
-              <button onClick={handleZoomIn} className="zoom-btn">+</button>
-              <button onClick={handleZoomOut} className="zoom-btn">-</button>
-              <button onClick={closeZoom} className="zoom-btn close">×</button>
+              <button type="button" onClick={handleZoomIn} className="zoom-btn">+</button>
+              {zoomLevel === 3 && (
+                <button type="button" onClick={handleZoomOut} className="zoom-btn">-</button>
+              )}
+              <button type="button" onClick={closeZoom} className="zoom-btn close">×</button>
             </div>
-            <div 
+            <div
               className="zoom-content"
               onMouseDown={handleMouseDown}
               onMouseMove={handleMouseMove}
               onMouseUp={handleMouseUp}
-              onWheel={handleWheel}
               onClick={(e) => e.stopPropagation()}
             >
               <img 
@@ -220,9 +420,17 @@ const PlanningSolution = () => {
                 alt="Zoomed Floor Plan" 
                 className="zoomed-image"
                 draggable={false}
+                loading="eager"
+                decoding="async"
+                onLoad={(e) => {
+                  // El cálculo del scale se hace en el useEffect, solo asegurar que la imagen esté lista
+                  const img = e.target;
+                  // La imagen se mostrará cuando initialScale esté calculado en el useEffect
+                }}
                 style={{
-                  transform: `scale(${zoomLevel}) translate(${position.x}px, ${position.y}px)`,
-                  cursor: isDragging ? 'grabbing' : 'grab'
+                  cursor: isDragging ? 'grabbing' : 'grab',
+                  transformOrigin: 'center center',
+                  willChange: 'transform'
                 }}
               />
             </div>

@@ -80,39 +80,89 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   background-color: #ffffff;
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
   cursor: pointer;
+  overflow: hidden;
+}
+
+.zoom-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.95);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10001;
+  pointer-events: none;
+}
+
+.loader-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top: 4px solid #ffffff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.zoom-modal .zoom-controls {
+  position: fixed !important;
+  top: 20px !important;
+  right: 20px !important;
+  display: flex !important;
+  gap: 10px;
+  z-index: 99999 !important;
+  pointer-events: auto !important;
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 
 .zoom-controls {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  display: flex;
+  position: fixed !important;
+  top: 20px !important;
+  right: 20px !important;
+  display: flex !important;
   gap: 10px;
-  z-index: 1001;
+  z-index: 99999 !important;
+  pointer-events: auto !important;
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 
 .zoom-btn {
-  width: 36px;
-  height: 36px;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  background-color: rgba(255, 255, 255, 0.6);
-  color: #333;
-  font-size: 1rem;
+  width: 36px !important;
+  height: 36px !important;
+  border: 1px solid rgba(0, 0, 0, 0.2) !important;
+  background-color: rgba(255, 255, 255, 1) !important;
+  color: #333 !important;
+  font-size: 1rem !important;
   font-weight: 300;
-  cursor: pointer;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  cursor: pointer !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   transition: all 0.3s ease;
+  pointer-events: auto !important;
+  position: relative !important;
+  z-index: 100000 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 
 .zoom-btn:hover {
@@ -127,10 +177,15 @@
 
 .zoom-content {
   position: relative;
-  max-width: 90%;
-  max-height: 90%;
+  width: 100vw;
+  height: 100vh;
   cursor: grab;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  pointer-events: auto;
 }
 
 .zoom-content:active {
@@ -138,11 +193,30 @@
 }
 
 .zoomed-image {
-  max-width: 100%;
-  max-height: 100%;
+  max-width: none;
+  max-height: none;
+  width: auto;
+  height: auto;
   object-fit: contain;
-  transition: transform 0.1s ease;
+  transition: opacity 0.2s ease-in, transform 0.1s ease-out;
   user-select: none;
+  transform-origin: center center;
+  will-change: transform;
+  opacity: 0;
+  -ms-interpolation-mode: bicubic;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: optimize-contrast;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  image-rendering: auto;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+.zoom-content:active .zoomed-image {
+  transition: none;
 }
 
 /* Responsive */
