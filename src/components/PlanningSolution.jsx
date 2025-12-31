@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Link } from 'react-router-dom';
 import Footer from './Footer';
+import OptimizedImage from './OptimizedImage';
 import './PlanningSolution.css';
 
 const PlanningSolution = () => {
@@ -37,13 +38,29 @@ const PlanningSolution = () => {
   };
 
   const handleZoomIn = (e) => {
+    e.preventDefault();
     e.stopPropagation();
-    setZoomLevel(prev => Math.min(prev + 0.5, 5));
+    console.log('Zoom In clicked, current level:', zoomLevel);
+    const newLevel = Math.min(zoomLevel + 0.5, 5);
+    console.log('Setting zoom level to:', newLevel);
+    setZoomLevel(newLevel);
+    // Force re-render
+    if (imageRef.current) {
+      imageRef.current.style.transform = `scale(${newLevel}) translate(${position.x}px, ${position.y}px)`;
+    }
   };
 
   const handleZoomOut = (e) => {
+    e.preventDefault();
     e.stopPropagation();
-    setZoomLevel(prev => Math.max(prev - 0.5, 0.5));
+    console.log('Zoom Out clicked, current level:', zoomLevel);
+    const newLevel = Math.max(zoomLevel - 0.5, 0.5);
+    console.log('Setting zoom level to:', newLevel);
+    setZoomLevel(newLevel);
+    // Force re-render
+    if (imageRef.current) {
+      imageRef.current.style.transform = `scale(${newLevel}) translate(${position.x}px, ${position.y}px)`;
+    }
   };
 
   const handleMouseDown = (e) => {
@@ -74,6 +91,15 @@ const PlanningSolution = () => {
     const delta = e.deltaY > 0 ? -0.2 : 0.2;
     setZoomLevel(prev => Math.max(0.5, Math.min(5, prev + delta)));
   };
+
+  // Sync transform with zoomLevel and position
+  useEffect(() => {
+    if (imageRef.current && zoomedImage) {
+      const transform = `scale(${zoomLevel}) translate(${position.x}px, ${position.y}px)`;
+      imageRef.current.style.setProperty('transform', transform, 'important');
+      console.log('useEffect: Applied transform', transform, 'to image');
+    }
+  }, [zoomLevel, position, zoomedImage]);
 
   return (
     <>
@@ -110,15 +136,12 @@ const PlanningSolution = () => {
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.4 }}
             >
-              <img 
-                src="./01.png" 
+              <OptimizedImage 
+                src="/01.png" 
                 alt="Architectural Floor Plan 1" 
                 className="floor-plan-image clickable"
-                onClick={() => handleImageClick('./01.png')}
-                onError={(e) => {
-                  console.error('Failed to load image 01.png');
-                  e.target.style.display = 'none';
-                }}
+                onClick={() => handleImageClick('/01.png')}
+                priority={true}
               />
             </motion.div>
 
@@ -129,15 +152,11 @@ const PlanningSolution = () => {
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.6 }}
             >
-              <img 
-                src="./02.png" 
+              <OptimizedImage 
+                src="/02.png" 
                 alt="Architectural Floor Plan 2" 
                 className="floor-plan-image clickable"
-                onClick={() => handleImageClick('./02.png')}
-                onError={(e) => {
-                  console.error('Failed to load image 02.png');
-                  e.target.style.display = 'none';
-                }}
+                onClick={() => handleImageClick('/02.png')}
               />
             </motion.div>
 
@@ -150,29 +169,21 @@ const PlanningSolution = () => {
             >
               {/* Third Floor Plan Image - Larger on Left */}
               <div className="floor-plan-container-left">
-                <img 
-                  src="./03.png" 
+                <OptimizedImage 
+                  src="/03.png" 
                   alt="Architectural Floor Plan 3" 
                   className="floor-plan-image clickable"
-                  onClick={() => handleImageClick('./03.png')}
-                  onError={(e) => {
-                    console.error('Failed to load image 03.png');
-                    e.target.style.display = 'none';
-                  }}
+                  onClick={() => handleImageClick('/03.png')}
                 />
               </div>
 
               {/* Fourth Floor Plan Image - Smaller on Right */}
               <div className="floor-plan-container-right">
-                <img 
-                  src="./04.png" 
+                <OptimizedImage 
+                  src="/04.png" 
                   alt="Architectural Floor Plan 4" 
                   className="floor-plan-image clickable"
-                  onClick={() => handleImageClick('./04.png')}
-                  onError={(e) => {
-                    console.error('Failed to load image 04.png');
-                    e.target.style.display = 'none';
-                  }}
+                  onClick={() => handleImageClick('/04.png')}
                 />
               </div>
             </motion.div>
@@ -184,15 +195,11 @@ const PlanningSolution = () => {
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: 1.0 }}
             >
-              <img 
-                src="./05.png" 
+              <OptimizedImage 
+                src="/05.png" 
                 alt="Architectural Floor Plan 5" 
                 className="floor-plan-image clickable"
-                onClick={() => handleImageClick('./05.png')}
-                onError={(e) => {
-                  console.error('Failed to load image 05.png');
-                  e.target.style.display = 'none';
-                }}
+                onClick={() => handleImageClick('/05.png')}
               />
             </motion.div>
           </motion.div>
@@ -200,20 +207,16 @@ const PlanningSolution = () => {
 
         {/* Interactive Zoom Modal */}
         {zoomedImage && (
-          <div className="zoom-modal" onClick={closeZoom}>
-            <div className="zoom-controls" onClick={(e) => e.stopPropagation()}>
-              <button onClick={handleZoomIn} className="zoom-btn">+</button>
-              <button onClick={handleZoomOut} className="zoom-btn">-</button>
-              <button onClick={closeZoom} className="zoom-btn close">×</button>
-            </div>
-            <div 
-              className="zoom-content"
-              onMouseDown={handleMouseDown}
-              onMouseMove={handleMouseMove}
-              onMouseUp={handleMouseUp}
-              onWheel={handleWheel}
-              onClick={(e) => e.stopPropagation()}
-            >
+          <>
+            <div className="zoom-modal" onClick={closeZoom}>
+              <div 
+                className="zoom-content"
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+                onWheel={handleWheel}
+                onClick={(e) => e.stopPropagation()}
+              >
               <img 
                 ref={imageRef}
                 src={zoomedImage} 
@@ -221,12 +224,66 @@ const PlanningSolution = () => {
                 className="zoomed-image"
                 draggable={false}
                 style={{
-                  transform: `scale(${zoomLevel}) translate(${position.x}px, ${position.y}px)`,
-                  cursor: isDragging ? 'grabbing' : 'grab'
+                  cursor: isDragging ? 'grabbing' : 'grab',
+                  willChange: 'transform'
                 }}
               />
+              </div>
             </div>
-          </div>
+            <div className="zoom-controls" style={{ position: 'fixed', top: '20px', right: '20px', zIndex: 10000 }}>
+              <button 
+                type="button" 
+                onClick={(e) => { 
+                  console.log('Zoom In button clicked');
+                  e.preventDefault(); 
+                  e.stopPropagation(); 
+                  handleZoomIn(e); 
+                }} 
+                onMouseDown={(e) => { 
+                  console.log('Zoom In mouse down');
+                  e.preventDefault(); 
+                  e.stopPropagation(); 
+                }}
+                className="zoom-btn"
+              >
+                +
+              </button>
+              <button 
+                type="button" 
+                onClick={(e) => { 
+                  console.log('Zoom Out button clicked');
+                  e.preventDefault(); 
+                  e.stopPropagation(); 
+                  handleZoomOut(e); 
+                }} 
+                onMouseDown={(e) => { 
+                  console.log('Zoom Out mouse down');
+                  e.preventDefault(); 
+                  e.stopPropagation(); 
+                }}
+                className="zoom-btn"
+              >
+                -
+              </button>
+              <button 
+                type="button" 
+                onClick={(e) => { 
+                  console.log('Close button clicked');
+                  e.preventDefault(); 
+                  e.stopPropagation(); 
+                  closeZoom(); 
+                }} 
+                onMouseDown={(e) => { 
+                  console.log('Close mouse down');
+                  e.preventDefault(); 
+                  e.stopPropagation(); 
+                }}
+                className="zoom-btn close"
+              >
+                ×
+              </button>
+            </div>
+          </>
         )}
       </section>
       <Footer />

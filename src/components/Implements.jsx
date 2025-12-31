@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Link } from 'react-router-dom';
 import Footer from './Footer';
+import OptimizedImage from './OptimizedImage';
 import './Implements.css';
 
 const Implements = () => {
@@ -119,17 +120,11 @@ const Implements = () => {
                     }}
                     onClick={() => handleImageClick(image.src)}
                   >
-                    <img
+                    <OptimizedImage
                       src={image.src}
                       alt={image.alt}
                       className={`gallery-image ${image.removeWhite}`}
-                      onError={(e) => {
-                        console.error('Error loading image:', image.src);
-                        e.target.style.display = 'none';
-                      }}
-                      onLoad={(e) => {
-                        console.log('Image loaded:', image.src);
-                      }}
+                      priority={sectionIndex === 0 && imageIndex === 0}
                     />
                   </motion.div>
                 ))}

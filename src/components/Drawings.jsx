@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Link } from 'react-router-dom';
 import Footer from './Footer';
+import OptimizedImage from './OptimizedImage';
 import './Drawings.css';
 
 const Drawings = () => {
@@ -37,13 +38,43 @@ const Drawings = () => {
   };
 
   const handleZoomIn = (e) => {
+    e.preventDefault();
     e.stopPropagation();
-    setZoomLevel((prev) => Math.min(prev + 0.5, 5));
+    console.log('Zoom In clicked, current level:', zoomLevel);
+    const newLevel = Math.min(zoomLevel + 0.5, 5);
+    console.log('Setting zoom level to:', newLevel);
+    setZoomLevel(newLevel);
+    // Force immediate DOM update
+    setTimeout(() => {
+      if (imageRef.current) {
+        const transform = `scale(${newLevel}) translate(${position.x}px, ${position.y}px)`;
+        imageRef.current.style.transform = transform;
+        imageRef.current.style.setProperty('transform', transform, 'important');
+        console.log('Applied transform to image:', transform);
+        console.log('Image element:', imageRef.current);
+        console.log('Computed style:', window.getComputedStyle(imageRef.current).transform);
+      }
+    }, 0);
   };
 
   const handleZoomOut = (e) => {
+    e.preventDefault();
     e.stopPropagation();
-    setZoomLevel((prev) => Math.max(prev - 0.5, 0.5));
+    console.log('Zoom Out clicked, current level:', zoomLevel);
+    const newLevel = Math.max(zoomLevel - 0.5, 0.5);
+    console.log('Setting zoom level to:', newLevel);
+    setZoomLevel(newLevel);
+    // Force immediate DOM update
+    setTimeout(() => {
+      if (imageRef.current) {
+        const transform = `scale(${newLevel}) translate(${position.x}px, ${position.y}px)`;
+        imageRef.current.style.transform = transform;
+        imageRef.current.style.setProperty('transform', transform, 'important');
+        console.log('Applied transform to image:', transform);
+        console.log('Image element:', imageRef.current);
+        console.log('Computed style:', window.getComputedStyle(imageRef.current).transform);
+      }
+    }, 0);
   };
 
   const handleMouseDown = (e) => {
@@ -74,6 +105,15 @@ const Drawings = () => {
     const delta = e.deltaY > 0 ? -0.2 : 0.2;
     setZoomLevel((prev) => Math.max(0.5, Math.min(5, prev + delta)));
   };
+
+  // Sync transform with zoomLevel and position
+  useEffect(() => {
+    if (imageRef.current && zoomedImage) {
+      const transform = `scale(${zoomLevel}) translate(${position.x}px, ${position.y}px)`;
+      imageRef.current.style.setProperty('transform', transform, 'important');
+      console.log('useEffect: Applied transform', transform, 'to image');
+    }
+  }, [zoomLevel, position, zoomedImage]);
 
   return (
     <>
@@ -106,15 +146,12 @@ const Drawings = () => {
 
             {/* Large image */}
             <div className="drawing-container">
-              <img
+              <OptimizedImage
                 src="/drawings/01.png"
                 alt="Drawing 1"
                 className="drawing-image clickable"
                 onClick={() => handleImageClick('/drawings/01.png')}
-                onError={(e) => {
-                  console.error('Failed to load image /drawings/01.png');
-                  e.target.style.display = 'none';
-                }}
+                priority={true}
               />
             </div>
 
@@ -125,15 +162,11 @@ const Drawings = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
             >
-              <img
+              <OptimizedImage
                 src="/drawings/02%20.png"
                 alt="Drawing 2"
                 className="drawing-image clickable"
                 onClick={() => handleImageClick('/drawings/02%20.png')}
-                onError={(e) => {
-                  console.error('Failed to load image /drawings/02%20.png');
-                  e.target.style.display = 'none';
-                }}
               />
             </motion.div>
 
@@ -144,15 +177,11 @@ const Drawings = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.8 }}
             >
-              <img
+              <OptimizedImage
                 src="/drawings/03%20.png"
                 alt="Drawing 3"
                 className="drawing-image clickable"
                 onClick={() => handleImageClick('/drawings/03%20.png')}
-                onError={(e) => {
-                  console.error('Failed to load image /drawings/03%20.png');
-                  e.target.style.display = 'none';
-                }}
               />
             </motion.div>
 
@@ -163,15 +192,11 @@ const Drawings = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.9 }}
             >
-              <img
+              <OptimizedImage
                 src="/drawings/04.png"
                 alt="Drawing 4"
                 className="drawing-image clickable"
                 onClick={() => handleImageClick('/drawings/04.png')}
-                onError={(e) => {
-                  console.error('Failed to load image /drawings/04.png');
-                  e.target.style.display = 'none';
-                }}
               />
             </motion.div>
 
@@ -182,15 +207,11 @@ const Drawings = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 1.0 }}
             >
-              <img
+              <OptimizedImage
                 src="/drawings/05.png"
                 alt="Drawing 5"
                 className="drawing-image clickable"
                 onClick={() => handleImageClick('/drawings/05.png')}
-                onError={(e) => {
-                  console.error('Failed to load image /drawings/05.png');
-                  e.target.style.display = 'none';
-                }}
               />
             </motion.div>
             {/* Drawing 6 */}
@@ -200,15 +221,11 @@ const Drawings = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 1.1 }}
             >
-              <img
+              <OptimizedImage
                 src="/drawings/06.png"
                 alt="Drawing 6"
                 className="drawing-image clickable"
                 onClick={() => handleImageClick('/drawings/06.png')}
-                onError={(e) => {
-                  console.error('Failed to load image /drawings/06.png');
-                  e.target.style.display = 'none';
-                }}
               />
             </motion.div>
 
@@ -220,27 +237,19 @@ const Drawings = () => {
               transition={{ duration: 0.8, delay: 1.2 }}
             >
               <div className="drawing-container-left">
-                <img
+                <OptimizedImage
                   src="/drawings/07.png"
                   alt="Drawing 7"
                   className="drawing-image clickable"
                   onClick={() => handleImageClick('/drawings/07.png')}
-                  onError={(e) => {
-                    console.error('Failed to load image /drawings/07.png');
-                    e.target.style.display = 'none';
-                  }}
                 />
               </div>
               <div className="drawing-container-right">
-                <img
+                <OptimizedImage
                   src="/drawings/08.png"
                   alt="Drawing 8"
                   className="drawing-image clickable"
                   onClick={() => handleImageClick('/drawings/08.png')}
-                  onError={(e) => {
-                    console.error('Failed to load image /drawings/08.png');
-                    e.target.style.display = 'none';
-                  }}
                 />
               </div>
             </motion.div>
@@ -252,15 +261,11 @@ const Drawings = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 1.4 }}
             >
-              <img
+              <OptimizedImage
                 src="/drawings/09.png"
                 alt="Drawing 9"
                 className="drawing-image clickable"
                 onClick={() => handleImageClick('/drawings/09.png')}
-                onError={(e) => {
-                  console.error('Failed to load image /drawings/09.png');
-                  e.target.style.display = 'none';
-                }}
               />
             </motion.div>
 
@@ -271,15 +276,11 @@ const Drawings = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 1.5 }}
             >
-              <img
+              <OptimizedImage
                 src="/drawings/10.png"
                 alt="Drawing 10"
                 className="drawing-image clickable"
                 onClick={() => handleImageClick('/drawings/10.png')}
-                onError={(e) => {
-                  console.error('Failed to load image /drawings/10.png');
-                  e.target.style.display = 'none';
-                }}
               />
             </motion.div>
 
@@ -290,15 +291,11 @@ const Drawings = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 1.6 }}
             >
-              <img
+              <OptimizedImage
                 src="/drawings/11.png"
                 alt="Drawing 11"
                 className="drawing-image clickable"
                 onClick={() => handleImageClick('/drawings/11.png')}
-                onError={(e) => {
-                  console.error('Failed to load image /drawings/11.png');
-                  e.target.style.display = 'none';
-                }}
               />
             </motion.div>
 
@@ -309,15 +306,11 @@ const Drawings = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 1.7 }}
             >
-              <img
+              <OptimizedImage
                 src="/drawings/12.png"
                 alt="Drawing 12"
                 className="drawing-image clickable"
                 onClick={() => handleImageClick('/drawings/12.png')}
-                onError={(e) => {
-                  console.error('Failed to load image /drawings/12.png');
-                  e.target.style.display = 'none';
-                }}
               />
             </motion.div>
 
@@ -328,15 +321,11 @@ const Drawings = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 1.8 }}
             >
-              <img
+              <OptimizedImage
                 src="/drawings/13.png"
                 alt="Drawing 13"
                 className="drawing-image clickable"
                 onClick={() => handleImageClick('/drawings/13.png')}
-                onError={(e) => {
-                  console.error('Failed to load image /drawings/13.png');
-                  e.target.style.display = 'none';
-                }}
               />
             </motion.div>
 
@@ -347,15 +336,11 @@ const Drawings = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 1.9 }}
             >
-              <img
+              <OptimizedImage
                 src="/drawings/14.png"
                 alt="Drawing 14"
                 className="drawing-image clickable"
                 onClick={() => handleImageClick('/drawings/14.png')}
-                onError={(e) => {
-                  console.error('Failed to load image /drawings/14.png');
-                  e.target.style.display = 'none';
-                }}
               />
             </motion.div>
 
@@ -366,15 +351,11 @@ const Drawings = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 2.0 }}
             >
-              <img
+              <OptimizedImage
                 src="/drawings/15.png"
                 alt="Drawing 15"
                 className="drawing-image clickable"
                 onClick={() => handleImageClick('/drawings/15.png')}
-                onError={(e) => {
-                  console.error('Failed to load image /drawings/15.png');
-                  e.target.style.display = 'none';
-                }}
               />
             </motion.div>
 
@@ -385,48 +366,94 @@ const Drawings = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 2.1 }}
             >
-              <img
+              <OptimizedImage
                 src="/drawings/16.png"
                 alt="Drawing 16"
                 className="drawing-image clickable"
                 onClick={() => handleImageClick('/drawings/16.png')}
-                onError={(e) => {
-                  console.error('Failed to load image /drawings/16.png');
-                  e.target.style.display = 'none';
-                }}
               />
             </motion.div>
           </motion.div>
         </div>
 
         {zoomedImage && (
-          <div className="zoom-modal" onClick={closeZoom}>
-            <div className="zoom-controls" onClick={(e) => e.stopPropagation()}>
-              <button onClick={handleZoomIn} className="zoom-btn">+</button>
-              <button onClick={handleZoomOut} className="zoom-btn">-</button>
-              <button onClick={closeZoom} className="zoom-btn close">×</button>
+          <>
+            <div className="zoom-modal" onClick={closeZoom}>
+              <div
+                className="zoom-content"
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+                onWheel={handleWheel}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <img
+                  ref={imageRef}
+                  src={zoomedImage}
+                  alt="Zoomed Drawing"
+                  className="zoomed-image"
+                  draggable={false}
+                  style={{
+                    cursor: isDragging ? 'grabbing' : 'grab',
+                    willChange: 'transform'
+                  }}
+                />
+              </div>
             </div>
-            <div
-              className="zoom-content"
-              onMouseDown={handleMouseDown}
-              onMouseMove={handleMouseMove}
-              onMouseUp={handleMouseUp}
-              onWheel={handleWheel}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <img
-                ref={imageRef}
-                src={zoomedImage}
-                alt="Zoomed Drawing"
-                className="zoomed-image"
-                draggable={false}
-                style={{
-                  transform: `scale(${zoomLevel}) translate(${position.x}px, ${position.y}px)`,
-                  cursor: isDragging ? 'grabbing' : 'grab'
+            <div className="zoom-controls" style={{ position: 'fixed', top: '20px', right: '20px', zIndex: 10000 }}>
+              <button 
+                type="button" 
+                onClick={(e) => { 
+                  console.log('Zoom In button clicked');
+                  e.preventDefault(); 
+                  e.stopPropagation(); 
+                  handleZoomIn(e); 
+                }} 
+                onMouseDown={(e) => { 
+                  console.log('Zoom In mouse down');
+                  e.preventDefault(); 
+                  e.stopPropagation(); 
                 }}
-              />
+                className="zoom-btn"
+              >
+                +
+              </button>
+              <button 
+                type="button" 
+                onClick={(e) => { 
+                  console.log('Zoom Out button clicked');
+                  e.preventDefault(); 
+                  e.stopPropagation(); 
+                  handleZoomOut(e); 
+                }} 
+                onMouseDown={(e) => { 
+                  console.log('Zoom Out mouse down');
+                  e.preventDefault(); 
+                  e.stopPropagation(); 
+                }}
+                className="zoom-btn"
+              >
+                -
+              </button>
+              <button 
+                type="button" 
+                onClick={(e) => { 
+                  console.log('Close button clicked');
+                  e.preventDefault(); 
+                  e.stopPropagation(); 
+                  closeZoom(); 
+                }} 
+                onMouseDown={(e) => { 
+                  console.log('Close mouse down');
+                  e.preventDefault(); 
+                  e.stopPropagation(); 
+                }}
+                className="zoom-btn close"
+              >
+                ×
+              </button>
             </div>
-          </div>
+          </>
         )}
       </section>
       <Footer />

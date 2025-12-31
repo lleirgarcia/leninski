@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Link } from 'react-router-dom';
@@ -31,13 +31,29 @@ const Details = () => {
   };
 
   const handleZoomIn = (e) => {
+    e.preventDefault();
     e.stopPropagation();
-    setZoomLevel((prev) => Math.min(prev + 0.5, 5));
+    console.log('Zoom In clicked, current level:', zoomLevel);
+    const newLevel = Math.min(zoomLevel + 0.5, 5);
+    console.log('Setting zoom level to:', newLevel);
+    setZoomLevel(newLevel);
+    // Force re-render
+    if (imageRef.current) {
+      imageRef.current.style.transform = `scale(${newLevel}) translate(${position.x}px, ${position.y}px)`;
+    }
   };
 
   const handleZoomOut = (e) => {
+    e.preventDefault();
     e.stopPropagation();
-    setZoomLevel((prev) => Math.max(prev - 0.5, 0.5));
+    console.log('Zoom Out clicked, current level:', zoomLevel);
+    const newLevel = Math.max(zoomLevel - 0.5, 0.5);
+    console.log('Setting zoom level to:', newLevel);
+    setZoomLevel(newLevel);
+    // Force re-render
+    if (imageRef.current) {
+      imageRef.current.style.transform = `scale(${newLevel}) translate(${position.x}px, ${position.y}px)`;
+    }
   };
 
   const handleMouseDown = (e) => {
@@ -68,6 +84,15 @@ const Details = () => {
     const delta = e.deltaY > 0 ? -0.2 : 0.2;
     setZoomLevel((prev) => Math.max(0.5, Math.min(5, prev + delta)));
   };
+
+  // Sync transform with zoomLevel and position
+  useEffect(() => {
+    if (imageRef.current && zoomedImage) {
+      const transform = `scale(${zoomLevel}) translate(${position.x}px, ${position.y}px)`;
+      imageRef.current.style.setProperty('transform', transform, 'important');
+      console.log('useEffect: Applied transform', transform, 'to image');
+    }
+  }, [zoomLevel, position, zoomedImage]);
 
   return (
     <>
@@ -195,20 +220,16 @@ const Details = () => {
         </div>
 
         {zoomedImage && (
-          <div className="zoom-modal" onClick={closeZoom}>
-            <div className="zoom-controls" onClick={(e) => e.stopPropagation()}>
-              <button onClick={handleZoomIn} className="zoom-btn">+</button>
-              <button onClick={handleZoomOut} className="zoom-btn">-</button>
-              <button onClick={closeZoom} className="zoom-btn close">×</button>
-            </div>
-            <div
-              className="zoom-content"
-              onMouseDown={handleMouseDown}
-              onMouseMove={handleMouseMove}
-              onMouseUp={handleMouseUp}
-              onWheel={handleWheel}
-              onClick={(e) => e.stopPropagation()}
-            >
+          <>
+            <div className="zoom-modal" onClick={closeZoom}>
+              <div
+                className="zoom-content"
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+                onWheel={handleWheel}
+                onClick={(e) => e.stopPropagation()}
+              >
               <img
                 ref={imageRef}
                 src={zoomedImage}
@@ -216,12 +237,66 @@ const Details = () => {
                 className="zoomed-image"
                 draggable={false}
                 style={{
-                  transform: `scale(${zoomLevel}) translate(${position.x}px, ${position.y}px)`,
-                  cursor: isDragging ? 'grabbing' : 'grab'
+                  cursor: isDragging ? 'grabbing' : 'grab',
+                  willChange: 'transform'
                 }}
               />
+              </div>
             </div>
-          </div>
+            <div className="zoom-controls" style={{ position: 'fixed', top: '20px', right: '20px', zIndex: 10000 }}>
+              <button 
+                type="button" 
+                onClick={(e) => { 
+                  console.log('Zoom In button clicked');
+                  e.preventDefault(); 
+                  e.stopPropagation(); 
+                  handleZoomIn(e); 
+                }} 
+                onMouseDown={(e) => { 
+                  console.log('Zoom In mouse down');
+                  e.preventDefault(); 
+                  e.stopPropagation(); 
+                }}
+                className="zoom-btn"
+              >
+                +
+              </button>
+              <button 
+                type="button" 
+                onClick={(e) => { 
+                  console.log('Zoom Out button clicked');
+                  e.preventDefault(); 
+                  e.stopPropagation(); 
+                  handleZoomOut(e); 
+                }} 
+                onMouseDown={(e) => { 
+                  console.log('Zoom Out mouse down');
+                  e.preventDefault(); 
+                  e.stopPropagation(); 
+                }}
+                className="zoom-btn"
+              >
+                -
+              </button>
+              <button 
+                type="button" 
+                onClick={(e) => { 
+                  console.log('Close button clicked');
+                  e.preventDefault(); 
+                  e.stopPropagation(); 
+                  closeZoom(); 
+                }} 
+                onMouseDown={(e) => { 
+                  console.log('Close mouse down');
+                  e.preventDefault(); 
+                  e.stopPropagation(); 
+                }}
+                className="zoom-btn close"
+              >
+                ×
+              </button>
+            </div>
+          </>
         )}
       </section>
       <Footer />
