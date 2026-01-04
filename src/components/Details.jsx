@@ -23,7 +23,16 @@ const Details = () => {
   // 2 niveles de zoom fijos: 2x, 3x
   const zoomLevels = [2, 3];
 
+  // Detectar si es un dispositivo móvil
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                   (window.matchMedia && window.matchMedia("(max-width: 768px)").matches);
+
   const handleImageClick = (imageSrc) => {
+    // No abrir imágenes en móviles
+    if (isMobile) {
+      return;
+    }
+    
     setZoomedImage(imageSrc);
     setZoomLevel(2); // Abrir en zoom 2x (zoom +1) por defecto
     setPosition({ x: 0, y: 0 });
@@ -95,8 +104,19 @@ const Details = () => {
     setIsDragging(true);
     // Guardar la posición del cursor y la posición actual de la imagen
     setDragStart({
-      x: e.clientX,
-      y: e.clientY
+      x: e.clientX || e.touches?.[0]?.clientX || 0,
+      y: e.clientY || e.touches?.[0]?.clientY || 0
+    });
+  };
+
+  // Handler para touch en móviles
+  const handleTouchStart = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+    const touch = e.touches[0];
+    setDragStart({
+      x: touch.clientX,
+      y: touch.clientY
     });
   };
 
@@ -137,8 +157,10 @@ const Details = () => {
         e.preventDefault();
         requestAnimationFrame(() => {
           // Calcular el delta del movimiento y aplicar el factor de sensibilidad
-          const deltaX = (e.clientX - lastMouseX) * dragSensitivity;
-          const deltaY = (e.clientY - lastMouseY) * dragSensitivity;
+          const clientX = e.clientX || e.touches?.[0]?.clientX || lastMouseX;
+          const clientY = e.clientY || e.touches?.[0]?.clientY || lastMouseY;
+          const deltaX = (clientX - lastMouseX) * dragSensitivity;
+          const deltaY = (clientY - lastMouseY) * dragSensitivity;
           
           setPosition((prevPosition) => ({
             x: prevPosition.x + deltaX,
@@ -146,8 +168,8 @@ const Details = () => {
           }));
           
           // Actualizar lastMouse para el próximo movimiento
-          lastMouseX = e.clientX;
-          lastMouseY = e.clientY;
+          lastMouseX = clientX;
+          lastMouseY = clientY;
         });
       };
 
@@ -155,12 +177,39 @@ const Details = () => {
         setIsDragging(false);
       };
 
+      const handleGlobalTouchMove = (e) => {
+        e.preventDefault();
+        if (e.touches.length === 1) {
+          const touch = e.touches[0];
+          requestAnimationFrame(() => {
+            const deltaX = (touch.clientX - lastMouseX) * dragSensitivity;
+            const deltaY = (touch.clientY - lastMouseY) * dragSensitivity;
+            
+            setPosition((prevPosition) => ({
+              x: prevPosition.x + deltaX,
+              y: prevPosition.y + deltaY
+            }));
+            
+            lastMouseX = touch.clientX;
+            lastMouseY = touch.clientY;
+          });
+        }
+      };
+
+      const handleGlobalTouchEnd = () => {
+        setIsDragging(false);
+      };
+
       window.addEventListener('mousemove', handleGlobalMouseMove, { passive: false });
       window.addEventListener('mouseup', handleGlobalMouseUp);
+      window.addEventListener('touchmove', handleGlobalTouchMove, { passive: false });
+      window.addEventListener('touchend', handleGlobalTouchEnd);
 
       return () => {
         window.removeEventListener('mousemove', handleGlobalMouseMove);
         window.removeEventListener('mouseup', handleGlobalMouseUp);
+        window.removeEventListener('touchmove', handleGlobalTouchMove);
+        window.removeEventListener('touchend', handleGlobalTouchEnd);
       };
     }
   }, [isDragging, dragStart.x, dragStart.y]);
@@ -211,12 +260,16 @@ const Details = () => {
     if (zoomedImage && imageRef.current && initialScale > 0 && !isLoading) {
       const img = imageRef.current;
       if (img.complete && img.naturalWidth && img.naturalHeight) {
-        // Aplicar estilos de tamaño una sola vez
+        // Aplicar estilos de tamaño manteniendo el aspect ratio original
         img.style.width = `${img.naturalWidth}px`;
         img.style.height = `${img.naturalHeight}px`;
         img.style.maxWidth = 'none';
         img.style.maxHeight = 'none';
+        img.style.minWidth = 'none';
+        img.style.minHeight = 'none';
         img.style.display = 'block';
+        img.style.objectFit = 'none'; // Desactivar object-fit para mantener dimensiones exactas
+        img.style.aspectRatio = 'auto'; // Permitir aspect ratio natural
         
         // Calcular el scale total: initialScale * zoomLevel
         const totalScale = initialScale * zoomLevel;
@@ -306,7 +359,9 @@ const Details = () => {
                 src="/details/01.png"
                 alt="Detail 1"
                 className="detail-image clickable"
-                onClick={() => handleImageClick('/details/01.png')}
+                {...(!isMobile && {
+                  onClick: () => handleImageClick('/details/01.png')
+                })}
                 onError={(e) => {
                   console.error('Failed to load image /details/01.png');
                   e.target.style.display = 'none';
@@ -325,7 +380,9 @@ const Details = () => {
                 src="/details/02.png"
                 alt="Detail 2"
                 className="detail-image clickable"
-                onClick={() => handleImageClick('/details/02.png')}
+                {...(!isMobile && {
+                  onClick: () => handleImageClick('/details/02.png')
+                })}
                 onError={(e) => {
                   console.error('Failed to load image /details/02.png');
                   e.target.style.display = 'none';
@@ -344,7 +401,9 @@ const Details = () => {
                 src="/details/03.png"
                 alt="Detail 3"
                 className="detail-image clickable"
-                onClick={() => handleImageClick('/details/03.png')}
+                {...(!isMobile && {
+                  onClick: () => handleImageClick('/details/03.png')
+                })}
                 onError={(e) => {
                   console.error('Failed to load image /details/03.png');
                   e.target.style.display = 'none';
@@ -363,7 +422,9 @@ const Details = () => {
                 src="/details/04.png"
                 alt="Detail 4"
                 className="detail-image clickable"
-                onClick={() => handleImageClick('/details/04.png')}
+                {...(!isMobile && {
+                  onClick: () => handleImageClick('/details/04.png')
+                })}
                 onError={(e) => {
                   console.error('Failed to load image /details/04.png');
                   e.target.style.display = 'none';
@@ -382,7 +443,9 @@ const Details = () => {
                 src="/details/05.png"
                 alt="Detail 5"
                 className="detail-image clickable"
-                onClick={() => handleImageClick('/details/05.png')}
+                {...(!isMobile && {
+                  onClick: () => handleImageClick('/details/05.png')
+                })}
                 onError={(e) => {
                   console.error('Failed to load image /details/05.png');
                   e.target.style.display = 'none';
@@ -400,7 +463,9 @@ const Details = () => {
               </div>
             )}
             <div className="zoom-controls" onClick={(e) => e.stopPropagation()}>
-              <button type="button" onClick={handleZoomIn} className="zoom-btn">+</button>
+              {zoomLevel < 3 && (
+                <button type="button" onClick={handleZoomIn} className="zoom-btn">+</button>
+              )}
               {zoomLevel === 3 && (
                 <button type="button" onClick={handleZoomOut} className="zoom-btn">-</button>
               )}
@@ -411,6 +476,7 @@ const Details = () => {
               onMouseDown={handleMouseDown}
               onMouseMove={handleMouseMove}
               onMouseUp={handleMouseUp}
+              onTouchStart={handleTouchStart}
               onClick={(e) => e.stopPropagation()}
             >
                 <img

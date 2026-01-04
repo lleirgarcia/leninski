@@ -6,6 +6,9 @@
   color: #333;
   font-family: 'Helvetica Neue', Arial, sans-serif;
   overflow-x: hidden;
+  /* No usar overflow-y aquí, dejar que el body haga scroll */
+  /* Asegurar que el contenedor pueda crecer más allá del viewport */
+  height: auto;
 }
 
 .implements-content {
@@ -129,7 +132,12 @@
   background: #ffffff;
   display: block;
   width: 100%;
-  min-height: 100px;
+  min-height: 200px;
+  /* Mejorar rendimiento durante carga */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 400px;
+  /* Asegurar que el contenedor tenga espacio reservado */
+  will-change: auto;
 }
 
 .gallery-item:hover {
@@ -148,6 +156,12 @@
   display: block;
   margin: 0;
   padding: 0;
+  /* Mejorar rendimiento de carga */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 500px;
+  /* Evitar bloqueo del layout durante carga */
+  min-height: 200px;
+  background-color: #f8f8f8;
 }
 
 .gallery-image:hover {
@@ -276,7 +290,7 @@
   background: transparent !important;
   display: block;
   /* Ensure proper color rendering */
-  color-adjust: exact !important;
+  print-color-adjust: exact !important;
   -webkit-print-color-adjust: exact !important;
   /* Prevent any color space conversion */
   image-orientation: from-image;
@@ -342,8 +356,18 @@
 }
 
 @media (max-width: 768px) {
+  .implements-container {
+    /* En móvil, asegurar que no haya restricciones de scroll */
+    overflow: visible;
+    height: auto;
+    min-height: 100vh;
+  }
+
   .implements-content {
     padding: 40px 0 20px;
+    /* Permitir que el contenido crezca */
+    min-height: auto;
+    height: auto;
   }
 
   .implements-title {

@@ -29,7 +29,16 @@ const Drawings = () => {
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const imageRef = useRef(null);
 
+  // Detectar si es un dispositivo móvil
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                   (window.matchMedia && window.matchMedia("(max-width: 768px)").matches);
+
   const handleImageClick = (imageSrc) => {
+    // No abrir imágenes en móviles
+    if (isMobile) {
+      return;
+    }
+    
     setZoomedImage(imageSrc);
     setZoomLevel(2); // Abrir en zoom 2x (zoom +1) por defecto
     setPosition({ x: 0, y: 0 });
@@ -41,6 +50,7 @@ const Drawings = () => {
       setIsLoading(false);
     }, 800);
   };
+
 
   const closeZoom = () => {
     setZoomedImage(null);
@@ -101,8 +111,19 @@ const Drawings = () => {
     setIsDragging(true);
     // Guardar la posición del cursor y la posición actual de la imagen
     setDragStart({
-      x: e.clientX,
-      y: e.clientY
+      x: e.clientX || e.touches?.[0]?.clientX || 0,
+      y: e.clientY || e.touches?.[0]?.clientY || 0
+    });
+  };
+
+  // Handler para touch en móviles
+  const handleTouchStart = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+    const touch = e.touches[0];
+    setDragStart({
+      x: touch.clientX,
+      y: touch.clientY
     });
   };
 
@@ -161,12 +182,39 @@ const Drawings = () => {
         setIsDragging(false);
       };
 
+      const handleGlobalTouchMove = (e) => {
+        e.preventDefault();
+        if (e.touches.length === 1) {
+          const touch = e.touches[0];
+          requestAnimationFrame(() => {
+            const deltaX = (touch.clientX - lastMouseX) * dragSensitivity;
+            const deltaY = (touch.clientY - lastMouseY) * dragSensitivity;
+            
+            setPosition((prevPosition) => ({
+              x: prevPosition.x + deltaX,
+              y: prevPosition.y + deltaY
+            }));
+            
+            lastMouseX = touch.clientX;
+            lastMouseY = touch.clientY;
+          });
+        }
+      };
+
+      const handleGlobalTouchEnd = () => {
+        setIsDragging(false);
+      };
+
       window.addEventListener('mousemove', handleGlobalMouseMove, { passive: false });
       window.addEventListener('mouseup', handleGlobalMouseUp);
+      window.addEventListener('touchmove', handleGlobalTouchMove, { passive: false });
+      window.addEventListener('touchend', handleGlobalTouchEnd);
 
       return () => {
         window.removeEventListener('mousemove', handleGlobalMouseMove);
         window.removeEventListener('mouseup', handleGlobalMouseUp);
+        window.removeEventListener('touchmove', handleGlobalTouchMove);
+        window.removeEventListener('touchend', handleGlobalTouchEnd);
       };
     }
   }, [isDragging, dragStart.x, dragStart.y]);
@@ -216,12 +264,16 @@ const Drawings = () => {
     if (zoomedImage && imageRef.current && initialScale > 0) {
       const img = imageRef.current;
       if (img.complete && img.naturalWidth && img.naturalHeight) {
-        // Aplicar estilos de tamaño una sola vez
+        // Aplicar estilos de tamaño manteniendo el aspect ratio original
         img.style.width = `${img.naturalWidth}px`;
         img.style.height = `${img.naturalHeight}px`;
         img.style.maxWidth = 'none';
         img.style.maxHeight = 'none';
+        img.style.minWidth = 'none';
+        img.style.minHeight = 'none';
         img.style.display = 'block';
+        img.style.objectFit = 'none'; // Desactivar object-fit para mantener dimensiones exactas
+        img.style.aspectRatio = 'auto'; // Permitir aspect ratio natural
         
         // Calcular el scale total: initialScale * zoomLevel
         const totalScale = initialScale * zoomLevel;
@@ -305,7 +357,9 @@ const Drawings = () => {
                 src="/drawings/01.png"
                 alt="Drawing 1"
                 className="drawing-image clickable"
-                onClick={() => handleImageClick('/drawings/01.png')}
+                {...(!isMobile && {
+                  onClick: () => handleImageClick('/drawings/01.png')
+                })}
                 onError={(e) => {
                   console.error('Failed to load image /drawings/01.png');
                   e.target.style.display = 'none';
@@ -324,7 +378,9 @@ const Drawings = () => {
                 src="/drawings/02%20.png"
                 alt="Drawing 2"
                 className="drawing-image clickable"
-                onClick={() => handleImageClick('/drawings/02%20.png')}
+                {...(!isMobile && {
+                  onClick: () => handleImageClick('/drawings/02%20.png')
+                })}
                 onError={(e) => {
                   console.error('Failed to load image /drawings/02%20.png');
                   e.target.style.display = 'none';
@@ -343,7 +399,9 @@ const Drawings = () => {
                 src="/drawings/03%20.png"
                 alt="Drawing 3"
                 className="drawing-image clickable"
-                onClick={() => handleImageClick('/drawings/03%20.png')}
+                {...(!isMobile && {
+                  onClick: () => handleImageClick('/drawings/03%20.png')
+                })}
                 onError={(e) => {
                   console.error('Failed to load image /drawings/03%20.png');
                   e.target.style.display = 'none';
@@ -362,7 +420,9 @@ const Drawings = () => {
                 src="/drawings/04.png"
                 alt="Drawing 4"
                 className="drawing-image clickable"
-                onClick={() => handleImageClick('/drawings/04.png')}
+                {...(!isMobile && {
+                  onClick: () => handleImageClick('/drawings/04.png')
+                })}
                 onError={(e) => {
                   console.error('Failed to load image /drawings/04.png');
                   e.target.style.display = 'none';
@@ -381,7 +441,9 @@ const Drawings = () => {
                 src="/drawings/05.png"
                 alt="Drawing 5"
                 className="drawing-image clickable"
-                onClick={() => handleImageClick('/drawings/05.png')}
+                {...(!isMobile && {
+                  onClick: () => handleImageClick('/drawings/05.png')
+                })}
                 onError={(e) => {
                   console.error('Failed to load image /drawings/05.png');
                   e.target.style.display = 'none';
@@ -399,7 +461,9 @@ const Drawings = () => {
                 src="/drawings/06.png"
                 alt="Drawing 6"
                 className="drawing-image clickable"
-                onClick={() => handleImageClick('/drawings/06.png')}
+                {...(!isMobile && {
+                  onClick: () => handleImageClick('/drawings/06.png')
+                })}
                 onError={(e) => {
                   console.error('Failed to load image /drawings/06.png');
                   e.target.style.display = 'none';
@@ -419,7 +483,9 @@ const Drawings = () => {
                   src="/drawings/07.png"
                   alt="Drawing 7"
                   className="drawing-image clickable"
-                  onClick={() => handleImageClick('/drawings/07.png')}
+                  {...(!isMobile && {
+                    onClick: () => handleImageClick('/drawings/07.png')
+                  })}
                   onError={(e) => {
                     console.error('Failed to load image /drawings/07.png');
                     e.target.style.display = 'none';
@@ -431,7 +497,9 @@ const Drawings = () => {
                   src="/drawings/08.png"
                   alt="Drawing 8"
                   className="drawing-image clickable"
-                  onClick={() => handleImageClick('/drawings/08.png')}
+                  {...(!isMobile && {
+                    onClick: () => handleImageClick('/drawings/08.png')
+                  })}
                   onError={(e) => {
                     console.error('Failed to load image /drawings/08.png');
                     e.target.style.display = 'none';
@@ -451,7 +519,9 @@ const Drawings = () => {
                 src="/drawings/09.png"
                 alt="Drawing 9"
                 className="drawing-image clickable"
-                onClick={() => handleImageClick('/drawings/09.png')}
+                {...(!isMobile && {
+                  onClick: () => handleImageClick('/drawings/09.png')
+                })}
                 onError={(e) => {
                   console.error('Failed to load image /drawings/09.png');
                   e.target.style.display = 'none';
@@ -470,7 +540,9 @@ const Drawings = () => {
                 src="/drawings/10.png"
                 alt="Drawing 10"
                 className="drawing-image clickable"
-                onClick={() => handleImageClick('/drawings/10.png')}
+                {...(!isMobile && {
+                  onClick: () => handleImageClick('/drawings/10.png')
+                })}
                 onError={(e) => {
                   console.error('Failed to load image /drawings/10.png');
                   e.target.style.display = 'none';
@@ -489,7 +561,9 @@ const Drawings = () => {
                 src="/drawings/11.png"
                 alt="Drawing 11"
                 className="drawing-image clickable"
-                onClick={() => handleImageClick('/drawings/11.png')}
+                {...(!isMobile && {
+                  onClick: () => handleImageClick('/drawings/11.png')
+                })}
                 onError={(e) => {
                   console.error('Failed to load image /drawings/11.png');
                   e.target.style.display = 'none';
@@ -508,7 +582,9 @@ const Drawings = () => {
                 src="/drawings/12.png"
                 alt="Drawing 12"
                 className="drawing-image clickable"
-                onClick={() => handleImageClick('/drawings/12.png')}
+                {...(!isMobile && {
+                  onClick: () => handleImageClick('/drawings/12.png')
+                })}
                 onError={(e) => {
                   console.error('Failed to load image /drawings/12.png');
                   e.target.style.display = 'none';
@@ -527,7 +603,9 @@ const Drawings = () => {
                 src="/drawings/13.png"
                 alt="Drawing 13"
                 className="drawing-image clickable"
-                onClick={() => handleImageClick('/drawings/13.png')}
+                {...(!isMobile && {
+                  onClick: () => handleImageClick('/drawings/13.png')
+                })}
                 onError={(e) => {
                   console.error('Failed to load image /drawings/13.png');
                   e.target.style.display = 'none';
@@ -546,7 +624,9 @@ const Drawings = () => {
                 src="/drawings/14.png"
                 alt="Drawing 14"
                 className="drawing-image clickable"
-                onClick={() => handleImageClick('/drawings/14.png')}
+                {...(!isMobile && {
+                  onClick: () => handleImageClick('/drawings/14.png')
+                })}
                 onError={(e) => {
                   console.error('Failed to load image /drawings/14.png');
                   e.target.style.display = 'none';
@@ -565,7 +645,9 @@ const Drawings = () => {
                 src="/drawings/15.png"
                 alt="Drawing 15"
                 className="drawing-image clickable"
-                onClick={() => handleImageClick('/drawings/15.png')}
+                {...(!isMobile && {
+                  onClick: () => handleImageClick('/drawings/15.png')
+                })}
                 onError={(e) => {
                   console.error('Failed to load image /drawings/15.png');
                   e.target.style.display = 'none';
@@ -584,7 +666,9 @@ const Drawings = () => {
                 src="/drawings/16.png"
                 alt="Drawing 16"
                 className="drawing-image clickable"
-                onClick={() => handleImageClick('/drawings/16.png')}
+                {...(!isMobile && {
+                  onClick: () => handleImageClick('/drawings/16.png')
+                })}
                 onError={(e) => {
                   console.error('Failed to load image /drawings/16.png');
                   e.target.style.display = 'none';
@@ -602,7 +686,9 @@ const Drawings = () => {
               </div>
             )}
             <div className="zoom-controls" onClick={(e) => e.stopPropagation()}>
-              <button type="button" onClick={handleZoomIn} className="zoom-btn">+</button>
+              {zoomLevel < 3 && (
+                <button type="button" onClick={handleZoomIn} className="zoom-btn">+</button>
+              )}
               {zoomLevel === 3 && (
                 <button type="button" onClick={handleZoomOut} className="zoom-btn">-</button>
               )}
@@ -613,6 +699,7 @@ const Drawings = () => {
               onMouseDown={handleMouseDown}
               onMouseMove={handleMouseMove}
               onMouseUp={handleMouseUp}
+              onTouchStart={handleTouchStart}
               onClick={(e) => e.stopPropagation()}
             >
               <img

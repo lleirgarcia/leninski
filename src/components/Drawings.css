@@ -46,6 +46,12 @@
   width: 80%;
   max-width: 800px;
   height: auto;
+  touch-action: pan-x pan-y pinch-zoom;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  pointer-events: auto;
 }
 
 .clickable {

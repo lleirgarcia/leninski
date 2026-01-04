@@ -1,24 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
 import { Link } from 'react-router-dom';
 import Footer from './Footer';
 import './Implements.css';
 
 const Implements = () => {
   const [zoomedImage, setZoomedImage] = useState(null);
-  const { ref, inView } = useInView({
-    threshold: 0.1,
-    triggerOnce: true
-  });
+
+  // Detectar si es un dispositivo móvil
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                   (window.matchMedia && window.matchMedia("(max-width: 768px)").matches);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
-  }, []);
+    // Solo hacer scroll to top en desktop, en móvil permitir scroll libre
+    if (!isMobile) {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    }
+    // Asegurar que el body pueda hacer scroll inmediatamente en móvil
+    if (isMobile) {
+      // Forzar que el body y html puedan hacer scroll
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+      document.body.style.height = '';
+      document.documentElement.style.height = '';
+      document.body.style.position = 'relative';
+      document.documentElement.style.position = 'relative';
+      
+      // Asegurar que el contenedor no bloquee el scroll
+      const container = document.querySelector('.implements-container');
+      if (container) {
+        container.style.overflow = '';
+        container.style.height = 'auto';
+      }
+    }
+  }, [isMobile]);
 
   const handleImageClick = (imageSrc) => {
+    // No abrir imágenes en móviles
+    if (isMobile) {
+      return;
+    }
+    
     setZoomedImage(imageSrc);
   };
 
@@ -65,64 +89,38 @@ const Implements = () => {
       <Link to="/" className="floating-home-btn">⌂</Link>
       
       <div className="implements-content">
-        <motion.h1
-          className="implements-title"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
+        <h1 className="implements-title">
           IMPLEMENTS
-        </motion.h1>
+        </h1>
 
-        <motion.div
-          ref={ref}
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ duration: 1, delay: 0.3 }}
-        >
+        <div>
           {/* Project Sections */}
           {projectSections.map((section, sectionIndex) => (
-            <motion.div
+            <div
               key={sectionIndex}
               className="project-section"
-              initial={{ opacity: 0, y: 30 }}
-              animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-              transition={{ 
-                duration: 0.8, 
-                delay: 0.4 + (sectionIndex * 0.2)
-              }}
             >
               {/* Project Title */}
-              <motion.h2
-                className="project-title"
-                initial={{ opacity: 1, y: 0 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ 
-                  duration: 0.6, 
-                  delay: 0.5 + (sectionIndex * 0.2)
-                }}
-              >
+              <h2 className="project-title">
                 {section.title}
-              </motion.h2>
+              </h2>
 
               {/* Gallery Table for this section */}
               <div className="gallery-table">
                 {section.images.map((image, imageIndex) => (
-                  <motion.div
+                  <div
                     key={`${sectionIndex}-${imageIndex}`}
                     className={`gallery-item ${image.size} ${section.title === 'BLOGERS' && imageIndex === 1 ? 'blogers-second-image' : ''} ${section.title === 'IZAKAYA' && imageIndex === 1 ? 'izakaya-second-image' : ''} ${imageIndex > 0 ? 'image-with-top-margin' : ''}`}
-                    initial={{ opacity: 1, y: 0 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ 
-                      duration: 0.6, 
-                      delay: 0.6 + (sectionIndex * 0.2) + (imageIndex * 0.05)
-                    }}
-                    onClick={() => handleImageClick(image.src)}
+                    {...(!isMobile && {
+                      onClick: () => handleImageClick(image.src)
+                    })}
                   >
                     <img
                       src={image.src}
                       alt={image.alt}
                       className={`gallery-image ${image.removeWhite}`}
+                      loading="lazy"
+                      decoding="async"
                       onError={(e) => {
                         console.error('Error loading image:', image.src);
                         e.target.style.display = 'none';
@@ -131,7 +129,7 @@ const Implements = () => {
                         console.log('Image loaded:', image.src);
                       }}
                     />
-                  </motion.div>
+                  </div>
                 ))}
               </div>
 
@@ -139,9 +137,9 @@ const Implements = () => {
               {sectionIndex < projectSections.length - 1 && (
                 <div className="section-separator"></div>
               )}
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
       </div>
 
       {/* Zoom Modal */}
