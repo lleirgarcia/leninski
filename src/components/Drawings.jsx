@@ -18,13 +18,13 @@ const Drawings = () => {
   }, []);
 
   const [zoomedImage, setZoomedImage] = useState(null);
-  const [zoomLevel, setZoomLevel] = useState(2); // Zoom inicial: 2x (zoom +1)
+  const [zoomLevel, setZoomLevel] = useState(1); // Zoom inicial: 1x (imagen completa en pantalla)
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [initialScale, setInitialScale] = useState(0); // Se calculará cuando la imagen cargue
   const [isLoading, setIsLoading] = useState(false); // Estado para el loader
   
-  // 2 niveles de zoom fijos: 2x, 3x
-  const zoomLevels = [2, 3];
+  // 7 niveles de zoom: 3 zoom out, nivel base, 3 zoom in
+  const zoomLevels = [0.33, 0.5, 0.75, 1, 2, 3, 4];
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const imageRef = useRef(null);
@@ -40,7 +40,7 @@ const Drawings = () => {
     }
     
     setZoomedImage(imageSrc);
-    setZoomLevel(2); // Abrir en zoom 2x (zoom +1) por defecto
+    setZoomLevel(1); // Abrir en zoom 1x (imagen completa) por defecto
     setPosition({ x: 0, y: 0 });
     setInitialScale(0); // Reset initial scale to 0, will be calculated on load
     setIsLoading(true); // Activar loader
@@ -54,7 +54,7 @@ const Drawings = () => {
 
   const closeZoom = () => {
     setZoomedImage(null);
-    setZoomLevel(2); // Reset a zoom 2x para la próxima vez que se abra
+    setZoomLevel(1); // Reset a zoom 1x para la próxima vez que se abra
     setPosition({ x: 0, y: 0 });
     setIsLoading(false); // Desactivar loader al cerrar
   };
@@ -236,16 +236,16 @@ const Drawings = () => {
           
           let scale;
           if (imgAspectRatio > viewportAspectRatio) {
-            // Imagen más ancha - ajustar al ancho del viewport (usar 1.0 para cubrir completamente)
+            // Imagen más ancha - ajustar al ancho del viewport
             scale = viewportWidth / img.naturalWidth;
           } else {
-            // Imagen más alta - ajustar al alto del viewport (usar 1.0 para cubrir completamente)
+            // Imagen más alta - ajustar al alto del viewport
             scale = viewportHeight / img.naturalHeight;
           }
           
-          // Asegurar que la imagen siempre cubra el viewport completamente
-          // Multiplicar por un factor para que sea ligeramente más grande
-          scale = scale * 1.1;
+          // Ajustar para que la imagen quepa completamente en la pantalla (sin exceder)
+          // Usar un factor ligeramente menor para asegurar que quepa completamente
+          scale = scale * 0.95;
           
           setInitialScale(scale);
         }
@@ -686,11 +686,11 @@ const Drawings = () => {
               </div>
             )}
             <div className="zoom-controls" onClick={(e) => e.stopPropagation()}>
-              {zoomLevel < 3 && (
-                <button type="button" onClick={handleZoomIn} className="zoom-btn">+</button>
-              )}
-              {zoomLevel === 3 && (
+              {zoomLevel !== 1 && zoomLevel > 0.33 && (
                 <button type="button" onClick={handleZoomOut} className="zoom-btn">-</button>
+              )}
+              {zoomLevel < 4 && (
+                <button type="button" onClick={handleZoomIn} className="zoom-btn">+</button>
               )}
               <button type="button" onClick={closeZoom} className="zoom-btn close">×</button>
             </div>
