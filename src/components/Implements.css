@@ -23,14 +23,29 @@
   width: 100%;
 }
 
+.implements-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 60px;
+  position: relative;
+}
+
 .implements-title {
   font-size: 3rem;
   font-weight: 300;
-  letter-spacing: 0.2em;
-  text-align: center;
-  margin-bottom: 60px;
+  letter-spacing: 0.05em;
   color: #333;
   text-transform: uppercase;
+}
+
+.implements-header .about-text {
+  font-size: 1.2rem;
+  font-weight: 300;
+  color: #333;
+  line-height: 1.6;
+  max-width: 600px;
+  text-align: right;
 }
 
 /* Gallery Table Layout */
@@ -370,9 +385,19 @@
     height: auto;
   }
 
+  .implements-header {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+
+  .implements-header .about-text {
+    text-align: center;
+  }
+
   .implements-title {
     font-size: 2rem;
-    margin-bottom: 40px;
+    margin-bottom: 0;
   }
 
   .gallery-table {
@@ -426,7 +451,6 @@
 
   .implements-title {
     font-size: 1.5rem;
-    margin-bottom: 30px;
   }
 
   .gallery-table {

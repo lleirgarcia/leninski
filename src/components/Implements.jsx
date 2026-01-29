@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import Footer from './Footer';
+import SEO from './SEO';
 import './Implements.css';
 
 const Implements = () => {
@@ -85,13 +86,24 @@ const Implements = () => {
 
   return (
     <div className="implements-container">
+      <SEO
+        title="Implemented Projects – LENA ROH"
+        description="Implemented interior work by LENA ROH—realized spaces and delivered outcomes, available for opportunities in Switzerland, the UK and Denmark."
+      />
       {/* Floating Home Button */}
-      <Link to="/" className="floating-home-btn">⌂</Link>
+      <Link to="/" className="floating-home-btn" aria-label="Back to Home">⌂</Link>
       
       <div className="implements-content">
-        <h1 className="implements-title">
-          IMPLEMENTS
-        </h1>
+        <div className="implements-header">
+          <h1 className="implements-title">
+            IMPLEMENTS
+          </h1>
+          <div className="about-text">
+            Project implementation is a way to keep an idea alive.
+            My involvement does not end
+            with drawings—it continues into the implementation phase. This is a complex and fascinating process where ideas become reality.
+          </div>
+        </div>
 
         <div>
           {/* Project Sections */}

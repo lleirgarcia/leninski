@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Link } from 'react-router-dom';
 import Footer from './Footer';
+import SEO from './SEO';
 import './Details.css';
 
 const Details = () => {
@@ -322,6 +323,10 @@ const Details = () => {
 
   return (
     <>
+      <SEO
+        title="Materials & Interior Details – LENA ROH"
+        description="Interior details, materials and crafted moments from LENA ROH’s portfolio—where proportion, texture and function meet."
+      />
       {/* Floating Home Button */}
       <Link to="/" className="floating-home-btn" aria-label="Back to Home">
         ⌂
@@ -337,7 +342,8 @@ const Details = () => {
           >
             <h1 className="details-title">DETAILS</h1>
             <div className="about-text">
-              Detailed views and specifications that showcase the precision and attention to detail in every aspect of the project.
+              Details are what I always pay attention to—not only in design, but also during project execution.
+              Thoughtful, individually designed details give a project its uniqueness and make it truly distinctive.
             </div>
           </motion.div>
 

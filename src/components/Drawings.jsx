@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Link } from 'react-router-dom';
 import Footer from './Footer';
+import SEO from './SEO';
 import './Drawings.css';
 
 const Drawings = () => {
@@ -324,6 +325,10 @@ const Drawings = () => {
 
   return (
     <>
+      <SEO
+        title="Interior Drawings & Concepts – LENA ROH"
+        description="A curated selection of interior drawings and concepts by LENA ROH, showcasing spatial thinking, atmosphere, and design intent."
+      />
       {/* Floating Home Button */}
       <Link to="/" className="floating-home-btn" aria-label="Back to Home">
         ⌂
@@ -339,7 +344,9 @@ const Drawings = () => {
           >
             <h1 className="drawings-title">DRAWINGS</h1>
             <div className="about-text">
-              Technical and artistic drawings that define the essence of the project. Replace these images with your own content.
+              Working drawings are the DNA of a project.
+              Architecture begins with an idea, but it is realized through drawings.
+              Here you will find the working documentation that transforms a concept into a clear, buildable set of instructions.
             </div>
           </motion.div>
 
