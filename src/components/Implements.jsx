@@ -93,19 +93,20 @@ const Implements = () => {
       {/* Floating Home Button */}
       <Link to="/" className="floating-home-btn" aria-label="Back to Home">⌂</Link>
       
-      <div className="implements-content">
-        <div className="implements-header">
-          <h1 className="implements-title">
-            IMPLEMENTS
-          </h1>
-          <div className="about-text">
-            Project implementation is a way to keep an idea alive.
-            My involvement does not end
-            with drawings—it continues into the implementation phase. This is a complex and fascinating process where ideas become reality.
+      <section className="implements">
+        <div className="container">
+          <div className="implements-header">
+            <h1 className="implements-title">
+              IMPLEMENTS
+            </h1>
+            <div className="about-text">
+              Project implementation is a way to keep an idea alive.
+              My involvement does not end
+              with drawings—it continues into the implementation phase. This is a complex and fascinating process where ideas become reality.
+            </div>
           </div>
-        </div>
 
-        <div>
+          <div className="implements-content">
           {/* Project Sections */}
           {projectSections.map((section, sectionIndex) => (
             <div
@@ -151,8 +152,9 @@ const Implements = () => {
               )}
             </div>
           ))}
+          </div>
         </div>
-      </div>
+      </section>
 
       {/* Zoom Modal */}
       {zoomedImage && (
